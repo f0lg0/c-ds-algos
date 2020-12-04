@@ -27,7 +27,7 @@ Item* createItem(int val) {
 
 /**
  * push: pushes (inserts) an item to the stack (you get the item with the createItem function)
- * @param newItem a new Item to be pushed
+ * @param newItem a pointer to new Item to be pushed
  * @return void
 */
 void push(Item *newItem) {
@@ -76,7 +76,7 @@ void pop() {
 
 /**
  * display: recursively prints the stack
- * @param start the Item at the bottom of the stack
+ * @param start the pointer to the Item at the bottom of the stack
  * @return void 
 */
 void display(Item *start) {

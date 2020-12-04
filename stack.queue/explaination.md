@@ -106,3 +106,66 @@ Empty
 We could potentially implement a stack using arrays but I will implement it with a linked list.
 
 ![stack](../assets/stack.png)
+
+## Queue
+
+A queue is another special kind of list, where items are inserted at one end called the rear and deleted at the other end called the front. Another name for a queue is a “FIFO” or “First-in-first-out” list.
+
+### Operations
+
+-   enqueue: inserts an element at the end of the queue
+-   dequeue: delets an element at the start of the queue
+
+### Representation
+
+```
+
+  0     1     2     3     4
+----|-----|-----|-----|-----|
+    |     |     |     |     |
+----|-----|-----|-----|-----|
+FL
+
+### INSERTING ###
+
+  0     1     2     3     4
+----|-----|-----|-----|-----|
+  X |     |     |     |     |
+----|-----|-----|-----|-----|
+F      L
+
+  0     1     2     3     4
+----|-----|-----|-----|-----|
+  X |  Y  |     |     |     |
+----|-----|-----|-----|-----|
+F            L
+
+
+### DELETING ###
+
+  0     1     2     3     4
+----|-----|-----|-----|-----|
+  X |  Y  |  Z  |     |     |
+----|-----|-----|-----|-----|
+F                  L
+
+
+  0     1     2     3     4
+----|-----|-----|-----|-----|
+    |  Y  |  Z  |     |     |
+----|-----|-----|-----|-----|
+       F           L
+
+
+  0     1     2     3     4
+----|-----|-----|-----|-----|
+    |     |  Z  |     |     |
+----|-----|-----|-----|-----|
+             F     L
+```
+
+### Implementation
+
+Just like stacks, queues could be implemented using arrays but I will use a linked list.
+
+![queue](../assets/queue.png)
