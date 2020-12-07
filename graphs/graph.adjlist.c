@@ -6,16 +6,17 @@
 */
 struct node {
     int data;
-    struct node *next;
+    struct node* next;
 };
 
 typedef struct node Node;
 
 /**
- * graph: a graph with a set number of vertices and a pointer to a linked list
+ * graph: a graph with a set number of vertices, a pointer to a linked list and a pointer to an helper array used to traverse the graph
 */
 struct graph {
     int numVertices;
+    int* visited;
     Node** adjList; // pointer to struct node*
 };
 
@@ -27,7 +28,7 @@ typedef struct graph Graph;
  * @return pointer to the newly created node
 */
 Node* createNode(int val) {
-    Node *newNode = malloc(sizeof(Node));
+    Node* newNode = malloc(sizeof(Node));
     newNode->data = val;
     newNode->next = NULL;
 
@@ -43,6 +44,7 @@ Graph* createGraph(int vertices) {
     Graph* graph = malloc(sizeof(Graph));
     graph->numVertices = vertices;
     graph->adjList = malloc(vertices * sizeof(Node));
+    graph->visited = malloc(vertices * sizeof(int));
 
     /*
         For simplicity, we use an unlabeled graph as opposed to a labeled one 
@@ -50,6 +52,7 @@ Graph* createGraph(int vertices) {
     */
     for (int i = 0; i < vertices; i++) {
         graph->adjList[i] = NULL;
+        graph->visited[i] = 0;
     }
 
     return graph;
@@ -93,6 +96,39 @@ void printGraph(Graph* graph) {
     }
 }
 
+/**
+ * DFS: recursive depth first search implementation
+ * @param graph a graph structure
+ * @param vertex the numeric value of the node you want to start traversin from
+ * @return void
+*/
+void DFS(Graph* graph, int vertex) {
+    Node* nodeAndNeighbors = graph->adjList[vertex];
+    Node* temp = nodeAndNeighbors;
+
+    graph->visited[vertex] = 1;
+    printf("Visited %d \n", vertex);
+
+    while (temp) {
+        int connectedVertex = temp->data;
+
+        if (graph->visited[connectedVertex] == 0) {
+            DFS(graph, connectedVertex);
+        }
+        temp = temp->next;
+    }
+}
+
+/**
+ * cleanVisitedArray: re-set the values back to 0 so we can DFS again
+ * @param graph a graph structure
+ * @return void
+*/
+void cleanVisitedArray(Graph* graph) {
+    for (int i = 0; i < graph->numVertices + 1; i++) {
+        graph->visited[i] = 0; 
+    }
+}
 
 int main() {
     return 0;
