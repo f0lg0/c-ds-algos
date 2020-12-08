@@ -41,7 +41,7 @@ There are two standard ways to traverse a graph:
 
 BFT will use a queue as an auxiliary structure to hold nodes for future processing and DFT will use a stack. Both auxiliary datastructures can be represented as arrays.
 
-### BFT
+### BFS
 
 Using the adjecency list method, an array to keep track of the visited nodes and a queue:
 
@@ -57,7 +57,7 @@ Using the adjecency list method, an array to keep track of the visited nodes and
             -   if no then mark it as visited and enqueue it
             -   otherwise move to the next node
 
-### DFT
+### DFS
 
 For the sake of simplicity I am going to use a simple array to keep track of visited nodes (0 or 1 values).
 

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "helper/queue.h"
 
 /**
  * node: piece of data containing a data field and a pointer to the next node of the list
@@ -102,12 +103,12 @@ void printGraph(Graph* graph) {
  * @param vertex the numeric value of the node you want to start traversin from
  * @return void
 */
-void DFS(Graph* graph, int vertex) {
-    Node* nodeAndNeighbors = graph->adjList[vertex];
+void DFS(Graph* graph, int startVertex) {
+    Node* nodeAndNeighbors = graph->adjList[startVertex];
     Node* temp = nodeAndNeighbors;
 
-    graph->visited[vertex] = 1;
-    printf("Visited %d \n", vertex);
+    graph->visited[startVertex] = 1;
+    printf("%d ", startVertex);
 
     while (temp) {
         int connectedVertex = temp->data;
@@ -117,6 +118,39 @@ void DFS(Graph* graph, int vertex) {
         }
         temp = temp->next;
     }
+
+    printf("\n");
+}
+
+/**
+ * BFS: iterative breadth first search implementation
+ * @param graph a graph structure
+ * @param startVertex the starting vertex
+ * @return void 
+*/
+void BFS(Graph* graph, int startVertex) {
+    Queue* q = createQueue();
+
+    graph->visited[startVertex] = 1;
+    enqueue(q, startVertex);
+
+    while (!isEmpty(q)) {
+        // printQueue(q);
+        int currentVertex = dequeue(q);
+        printf("%d ", currentVertex);
+
+        Node* temp = graph->adjList[currentVertex];
+        while (temp) {
+            int neighbor = temp->data;
+
+            if (graph->visited[neighbor] == 0) {
+                graph->visited[neighbor] = 1;
+                enqueue(q, neighbor);
+            }
+            temp = temp->next;
+        }
+    }
+    printf("\n");
 }
 
 /**
