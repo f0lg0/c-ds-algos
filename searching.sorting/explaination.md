@@ -73,8 +73,39 @@ binsrch(a[], n, x) {
 
 ## Sorting Algos
 
+DISCLAIMER: this section only contains 3 simple sorting algorithms.
+
 ### Bubble Sort
 
 The bubble sort is easy to understand and program. The basic idea of bubble sort is to pass through the file sequentially several times. In each pass, we compare each element in the file with its successor i.e., X[i] with X[i+1] and interchange two element when they are not in proper order.
 
 The larger elements will "bubble up" to the end of the array.
+
+#### Time complexity
+
+O(n^2)
+
+### Selection Sort
+
+Selection sort will not require no more than n-1 interchanges. Suppose x is an array of size n stored in memory. The selection sort algorithm first selects the smallest element in the array x and place it at array position 0; then it selects the next smallest element in the array x and place it at array position 1. It simply continues this procedure until it places the biggest element in the last position of the array.
+The array is passed through (n-1) times and the smallest element is placed in its respective position in the array as detailed below:
+
+1. Find the location of the smallest element and interchange it with arr[0]
+2. leave the first element and find the location of the smallest element in the subarray starting from arr[1] and interchange it with xarr[1]
+3. Repeat these steps with the rest of the array
+
+#### Time complexity
+
+O(n^2)
+
+### Quick Sort
+
+The quick sort algorithm partitions the original array by rearranging it into two groups.
+The first group contains those elements less than some arbitrary chosen value taken from the set, and the second group contains those elements greater than or equal to the chosen value. The chosen value is known as the pivot element. Once the array has
+been rearranged in this way with respect to the pivot, the same partitioning procedure is recursively applied to each of the two subsets. When all the subsets have been partitioned and rearranged, the original array is sorted.
+
+See implementation for more details.
+
+#### Time complexity
+
+O(n log n)
