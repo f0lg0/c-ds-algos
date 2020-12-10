@@ -4,6 +4,9 @@ A commented collection of Datastructures and Algorithms implementations written 
 
 ## What's this repo about
 
+### IMPORTANT NOTE
+Every main function is empty and I didn't provide test cases and data because I was focused more on the implementation of the ds/algo. I was pretty lazy I got to admit this :D I will probably add them in the near future.
+
 When I learn a new language I usually go through algorithms and data-structures as if I was learning them for the first time. I find it really useful especially to get comfortable with the langage I am learning.
 
 This time I have decided to share the code I wrote following various books and sources I have used in the past with different languages. This is not a curated and in-depth collection of every possible data structure or algorithm ever developed but it's what a beginner in this language wrote until he got comfortable with it. Most of the code is commented following a standard and I prioritized readable code over concise code.
