@@ -2,10 +2,10 @@
 
 A commented collection of Datastructures and Algorithms implementations written in C plus some notes I took while writing them.
 
-## What's this repo about
-
 ### IMPORTANT NOTE
 Every main function is empty and I didn't provide test cases and data because I was focused more on the implementation of the ds/algo. I was pretty lazy I got to admit this :D I will probably add them in the near future.
+
+## What's this repo about
 
 When I learn a new language I usually go through algorithms and data-structures as if I was learning them for the first time. I find it really useful especially to get comfortable with the langage I am learning.
 
