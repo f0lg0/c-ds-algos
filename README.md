@@ -29,4 +29,4 @@ English is not my first language so if you find errors feel free to fix them, I 
 
 Assets taken from "LECTURE NOTES ON DATA STRUCTURES USING C" by L. V. NARASIMHA PRASAD and E. KRISHNA RAO PATRO.
 
-Higly recommend this book.
+Highly recommend this book.
