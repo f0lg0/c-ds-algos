@@ -13,7 +13,7 @@ struct node {
 
 typedef struct node Node;
 
-Node *nodesQueue[50]; // queue of nodes that we need to do a breadth first search (level order)
+Node* nodesQueue[50]; // queue of nodes that we need to do a breadth first search (level order)
 int nodesCount = 0; // total number of nodes in the binary tree
 
 /**
@@ -36,7 +36,7 @@ Node* createNode(int val) {
  * @param levels number of levels of the tree
  * @return void
 */
-void createFullTree(Node *root, int levels) {
+void createFullTree(Node* root, int levels) {
     if (root) {
         if (levels > 0) {
             root->leftChild = createNode((rand() % 100) + 1);
@@ -54,7 +54,7 @@ void createFullTree(Node *root, int levels) {
  * @param root the root of the tree
  * @param parent where to start building the queue (0 for root)
 */
-void makeQueue(Node *root, int parent) {
+void makeQueue(Node* root, int parent) {
     if (root) {
         nodesCount++;
         nodesQueue[parent] = root;
@@ -69,7 +69,7 @@ void makeQueue(Node *root, int parent) {
  * @param space how much space from the left of the terminal
  * @return void
 */
-void printTree(Node *root, int space) {
+void printTree(Node* root, int space) {
     if (!root) 
         return; 
   
@@ -90,7 +90,7 @@ void printTree(Node *root, int space) {
  * inorder: prints the tree with the inorder method (see explaination)
  * @param root the root of the tree
 */
-void inorder(Node *root) {
+void inorder(Node* root) {
     if (root) {
         inorder(root->leftChild);
         printf("%3d", root->data);
@@ -102,7 +102,7 @@ void inorder(Node *root) {
  * preorder: prints the tree with the preorder method (see explaination)
  * @param root the root of the tree
 */
-void preorder(Node *root) {
+void preorder(Node* root) {
     if (root) {
         printf("%4d", root->data);
         preorder(root->leftChild);
@@ -114,7 +114,7 @@ void preorder(Node *root) {
  * postorder: prints the tree with the postorder method (see explaination)
  * @param root the root of the tree
 */
-void postorder(Node *root) {
+void postorder(Node* root) {
     if (root) {
         postorder(root->leftChild);
         postorder(root->rightChild);
@@ -126,7 +126,7 @@ void postorder(Node *root) {
  * level order: prints the tree with the breadth first search method (see explaination)
  * @param root the root of the tree
 */
-void levelorder(Node *root, Node *nodesQueue[]) {
+void levelorder(Node* root, Node* nodesQueue[]) {
     for (int i = 0; i < nodesCount; i++) {
         if (nodesQueue[i]) {
             printf("%4d", nodesQueue[i]->data);
@@ -136,5 +136,29 @@ void levelorder(Node *root, Node *nodesQueue[]) {
 
 int main() {
     srand((unsigned)time(NULL));
+
+    Node* root = createNode(0);
+    createFullTree(root, 3);
+    makeQueue(root, 0);
+
+    printTree(root, 0);
+
+    printf("Inorder: \n");
+    inorder(root);
+    printf("\n");
+
+    printf("Preorder: \n");
+    preorder(root);
+    printf("\n");
+
+    printf("Postorder: \n");
+    postorder(root);
+    printf("\n");
+
+    printf("Levelorder: \n");
+    levelorder(root, nodesQueue);
+    printf("\n");
+
+
     return 0;
 }

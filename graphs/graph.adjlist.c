@@ -119,7 +119,6 @@ void DFS(Graph* graph, int startVertex) {
         temp = temp->next;
     }
 
-    printf("\n");
 }
 
 /**
@@ -165,5 +164,24 @@ void cleanVisitedArray(Graph* graph) {
 }
 
 int main() {
+    Graph* graph = createGraph(4);
+    addEdge(graph, 0, 1);
+    addEdge(graph, 0, 2);
+    addEdge(graph, 0, 3);
+
+    addEdge(graph, 1, 2);
+    addEdge(graph, 2, 4);
+
+    printGraph(graph);
+    
+    printf("\nDFS: ");
+    DFS(graph, 0);
+    printf("\n");
+
+    cleanVisitedArray(graph);
+
+    printf("BFS: ");
+    BFS(graph, 0);
+
     return 0;
 }

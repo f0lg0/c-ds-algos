@@ -10,7 +10,7 @@ struct node {
 };
 
 typedef struct node Node;
-Node *start = NULL; // at the beginning the list is empty, this is a pointer that points to the first element
+Node* start = NULL; // at the beginning the list is empty, this is a pointer that points to the first element
 
 /**
  * createNode: creates a new Node
@@ -30,7 +30,7 @@ Node* createNode(int value) {
  * @param start the start of the list
  * @return number of nodes
 */
-int countNodes(Node *start) {
+int countNodes(Node* start) {
     if (!start)
         return 0;
 
@@ -44,8 +44,8 @@ int countNodes(Node *start) {
  * @return void 
 */
 void initList(int size) {
-    Node *newNode;
-    Node *tempNode;
+    Node* newNode;
+    Node* tempNode;
 
     for (int i = 0; i < size; i++) {
         newNode = createNode(0);
@@ -69,7 +69,7 @@ void initList(int size) {
  * @return void
 */
 void insertAtBeginning(int value) {
-    Node *newNode = createNode(value);
+    Node* newNode = createNode(value);
 
     if (!start) {
         start = newNode;
@@ -86,8 +86,8 @@ void insertAtBeginning(int value) {
  * @return void
 */
 void insertAtMid(int value, int pos) {
-    Node *newNode = createNode(value);
-    Node *tempNode, *prevNode;
+    Node* newNode = createNode(value);
+    Node* tempNode, *prevNode;
 
     int nodesCount = countNodes(start);
 
@@ -114,8 +114,8 @@ void insertAtMid(int value, int pos) {
  * @return void
 */
 void insertAtEnd(int value) {
-    Node *newNode = createNode(value);
-    Node *tempNode;
+    Node* newNode = createNode(value);
+    Node* tempNode;
 
     if (!start) {
         start = newNode;
@@ -137,7 +137,7 @@ void deleteAtBeginning() {
     if (!start) {
         printf("[WARNING] Empty list.\n");
     } else {
-        Node *tempNode = start;
+        Node* tempNode = start;
         start = start->next;
         free(tempNode);
     }
@@ -152,7 +152,7 @@ void deleteAtEnd() {
     if (!start) {
         printf("[WARNING] Empty list.\n");
     } else {
-        Node *tempNode, *prevNode;
+        Node* tempNode, *prevNode;
         tempNode = prevNode = start;
 
         while (tempNode->next) {
@@ -174,7 +174,8 @@ void deleteAtMid(int pos) {
     if (!start) {
         printf("[WARNING] Empty list.\n");
     } else {
-        Node *tempNode, *prevNode;
+        Node* tempNode; 
+        Node* prevNode;
         int nodesCount = countNodes(start);
         if (pos > nodesCount) {
             printf("[ERR] Node doesn't exist.\n");
@@ -204,7 +205,7 @@ void deleteAll() {
         printf("\n[ERR] List was already empty.\n");
         return;
     } else {
-        Node *tempNode;
+        Node* tempNode;
 
         while (start) {
             tempNode = start;
@@ -222,7 +223,7 @@ void deleteAll() {
  * @param start the start node
  * @return void
 */
-void traverse(Node *start) {
+void traverse(Node* start) {
     if (!start) {
         return;
     } else {
@@ -236,7 +237,7 @@ void traverse(Node *start) {
  * @param start the start node
  * @return void
 */
-void reverseTraverse(Node *start) {
+void reverseTraverse(Node* start) {
     if (!start) {
         return;
     } else {

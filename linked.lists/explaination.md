@@ -30,7 +30,7 @@ Generally array's allocates the memory for all its elements in one block whereas
 A linked list allocates space for each element separately in its own block of memory called a "node". The list gets an overall structure by using pointers to connect all its nodes together like the links in a chain. Each node contains two fields; a "data" field to store whatever element, and a "next" field which is a pointer used to link to the next node. Each node is allocated in the heap using malloc(), so the node memory continues to exist until it is explicitly de-allocated using free(). The front of the list is a
 pointer to the “start” node.
 
-![sll](./assets/sll.png)
+![sll](../assets/sll.png)
 
 The beginning of the linked list is stored in a "start" pointer which points to the first node.
 

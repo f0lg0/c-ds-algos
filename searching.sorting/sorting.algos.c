@@ -18,9 +18,9 @@ void swap(int* x, int* y) {
  * bubbleSort: bubble sort implementation
  * @param arr an array of integers
  * @param arrSize the size of that array
- * @return a pointer to that sorted array
+ * @return void
 */
-int* bubbleSort(int arr[], int arrSize) {
+void bubbleSort(int arr[], int arrSize) {
     for (int i = 0; i < arrSize - 1; i++) {
         for (int j = i + 1;  j < arrSize; j++) {
             if (arr[i] > arr[j]) {
@@ -28,16 +28,15 @@ int* bubbleSort(int arr[], int arrSize) {
             }
         }
     }
-    return arr;
 }
 
 /**
  * selectionSort: selection sort implementation
  * @param arr an array of integers
  * @param arrSize the size of that array
- * @return a pointer to that sorted array
+ * @return void
 */
-int* selectionSort(int arr[], int arrSize) {
+void selectionSort(int arr[], int arrSize) {
     int minIndex; 
   
     for (int i = 0; i < arrSize - 1; i++) { 
@@ -48,7 +47,6 @@ int* selectionSort(int arr[], int arrSize) {
   
         swap(&arr[minIndex], &arr[i]); 
     } 
-    return arr;
 }
 
 /**
@@ -57,6 +55,7 @@ int* selectionSort(int arr[], int arrSize) {
  * @param arrSize length of the array
  * @param start starting index point of the array
  * @param end ending index point of the array 
+ * @return swapIndex
 */
 int pivot(int arr[], int arrSize, int start, int end) {
     int pivot = arr[start];
@@ -80,9 +79,9 @@ int pivot(int arr[], int arrSize, int start, int end) {
  * @param arrSize length of the array
  * @param left the left index point of the array, at the first iteration this is going to be 0 
  * @param right the right index point of the array, athe the first iteration this is going to be arrSize - 1
- * @return a pointer to the sorted array
+ * @return void
 */
-int* quickSort(int arr[], int arrSize, int left, int right) {
+void quickSort(int arr[], int arrSize, int left, int right) {
     /* NOTE: we could avoid passing the array length everytime but I was too lazy */
 
     if (left < right) {
@@ -94,10 +93,24 @@ int* quickSort(int arr[], int arrSize, int left, int right) {
         // right
         quickSort(arr, arrSize, pivotIndex + 1, right);
     }
-
-    return arr;
 }
 
 int main() {
+    int arr[] = {8, 3, 0, 1, 5, 4, 7, 12, 54, 21, 99};
+    
+    for (int i = 0; i < 11; i++) {
+        printf("%d ", arr[i]);
+    }
+
+    printf("\n");
+
+    quickSort(arr, 11, 0, 10);
+
+    for (int i = 0; i < 11; i++) {
+        printf("%d ", arr[i]);
+    }
+
+    printf("\n");
+
     return 0;
 }
