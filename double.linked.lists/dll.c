@@ -67,15 +67,15 @@ int countNodes(Node* start) {
  * @param value the value of the node 
  * @return void
 */
-void insertAtBeginning(Node* start, int val) {
+void insertAtBeginning(Node** start, int val) {
     Node* newNode = createNode(val);
 
-    if (!start) {
-        start = newNode;
+    if (!(*start)) {
+        *start = newNode;
     } else {
-        newNode->right = start;
-        start->left = newNode;
-        start = newNode;
+        newNode->right = *start;
+        (*start)->left = newNode;
+        *start = newNode;
     }
 }
 
@@ -84,13 +84,13 @@ void insertAtBeginning(Node* start, int val) {
  * @param value the value of the node
  * @return void
 */
-void insertAtEnd(Node* start, int val) {
+void insertAtEnd(Node** start, int val) {
     Node* newNode = createNode(val);
 
-    if (!start) {
-        start = newNode;
+    if (!(*start)) {
+        *start = newNode;
     } else {
-        Node* tempNode = start;
+        Node* tempNode = *start;
         while (tempNode->right) {
             tempNode = tempNode->right;
         }
@@ -105,13 +105,15 @@ void insertAtEnd(Node* start, int val) {
  * @param pos the position you want the node to be in
  * @return void
 */
-void insertAtMid(Node* start, int val, int pos) {
-    int nodesCount = countNodes(start);
+void insertAtMid(Node** start, int val, int pos) {
+    int nodesCount = countNodes(*start);
 
     if (pos > 1 && pos < nodesCount) {
         Node* newNode = createNode(val);
-        Node* tempNode, *prevNode;
-        tempNode = prevNode = start;
+        Node* tempNode;
+        Node* prevNode;
+
+        tempNode = prevNode = *start;
 
         int i = 1;
         while (i < pos) {
@@ -135,13 +137,13 @@ void insertAtMid(Node* start, int val, int pos) {
  * deleteAtBeginning: deletes the first node of the list
  * @return void
 */
-void deleteAtBeginning(Node* start) {
-    if (!start) {
+void deleteAtBeginning(Node** start) {
+    if (!(*start)) {
         printf("[WARNING] Empty list\n");
     } else {
-        Node* tempNode = start;
-        start = start->right;
-        start->left = NULL;
+        Node* tempNode = *start;
+        *start = (*start)->right;
+        (*start)->left = NULL;
 
         free(tempNode);
     }
@@ -151,11 +153,11 @@ void deleteAtBeginning(Node* start) {
  * deleteAtEnd: deletes the last node of the list
  * @return void
 */
-void deleteAtEnd(Node* start) {
-    if (!start) {
+void deleteAtEnd(Node** start) {
+    if (!(*start)) {
         printf("[WARNING] Empty list\n");
     } else {
-        Node* tempNode = start;
+        Node* tempNode = *start;
         while (tempNode->right) {
             tempNode = tempNode->right;
         }
@@ -169,14 +171,14 @@ void deleteAtEnd(Node* start) {
  * @param pos the node's  position
  * @return void
 */
-void deleteAtMid(Node* start, int pos) {
-    if (!start) {
+void deleteAtMid(Node** start, int pos) {
+    if (!(*start)) {
         printf("[WARNING] Empty list\n");
     } else {
-        int nodesCount = countNodes(start);
+        int nodesCount = countNodes(*start);
 
         if (pos > 1 && pos < nodesCount) {
-            Node* tempNode = start;
+            Node* tempNode = *start;
 
             int i = 1;
             while (i < pos) {
@@ -196,16 +198,16 @@ void deleteAtMid(Node* start, int pos) {
  * deleteAll: delete entire list
  * @return void
 */
-void deleteAll(Node* start) {
-    if (!start) {
+void deleteAll(Node** start) {
+    if (!(*start)) {
         printf("\n[ERR] List was already empty.\n");
         return;
     } else {
         Node* tempNode;
 
-        while (start) {
-            tempNode = start;
-            start = start->right;
+        while (*start) {
+            tempNode = *start;
+            *start = (*start)->right;
 
             free(tempNode);
         }
@@ -244,9 +246,31 @@ int main() {
     Node* start = createNode(1);
     initList(start, 10);
     traverse(start);
+    printf("\n");
 
     /* here you can mess around by adding and deleting nodes */
+    deleteAtBeginning(&start);
+    traverse(start);
+    printf("\n");
 
+    insertAtBeginning(&start, 5);
+    traverse(start);
+    printf("\n");
+
+    insertAtEnd(&start, 9);
+    traverse(start);
+    printf("\n");
+
+    insertAtMid(&start, 7, 3);
+    traverse(start);
+    printf("\n");
+
+    deleteAtEnd(&start);
+    traverse(start);
+    printf("\n");
+
+    deleteAll(&start);
+    traverse(start);
     printf("\n");
 
     return 0;
