@@ -3,7 +3,15 @@
 A commented collection of Datastructures and Algorithms implementations written in C plus some notes I took while writing them.
 
 ### IMPORTANT NOTE
-Every main function is empty and I didn't provide test cases and data because I was focused more on the implementation of the ds/algo. I was pretty lazy I got to admit this :D I will probably add them in the near future.
+~Every main function is empty and I didn't provide test cases and data because I was focused more on the implementation of the ds/algo. I was pretty lazy I got to admit this :D I will probably add them in the near future.~
+
+DONE:
+* filled some main functions by providing test cases and data
+* refactored sotring algos  function
+* redactored graphs and trees
+
+TODO:
+* stop using global variables for DLL and SLL
 
 ## What's this repo about
 
