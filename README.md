@@ -9,9 +9,8 @@ DONE:
 * filled some main functions by providing test cases and data
 * refactored sotring algos  function
 * redactored graphs and trees
-
-TODO:
 * stop using global variables for DLL and SLL
+
 
 ## What's this repo about
 
