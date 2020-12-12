@@ -4,7 +4,7 @@ Data structure is a representation of logical relationship existing between indi
 
 ## Linear data structure
 
-Its elements form a sequence or a lienar list:
+Its elements form a sequence or a linear list:
 
 -   array
 -   stacks
@@ -13,7 +13,7 @@ Its elements form a sequence or a lienar list:
 
 ## Non linear data structure
 
-Its elements form a hierarchical classification where data items appears at various levels
+Its elements form a hierarchical classification where data items appear at various levels
 
 -   Trees
 -   Graphs
@@ -35,7 +35,7 @@ Data structures are divided into two types:
 
 The most important process in designing a problem involves choosing which data structure to use. The choice depends greatly on the type of operations you wish to perform.
 
-For example, if we have a sequence of objects and we want to delete one from it using an array is too costly: removing an item in an array causes the re-indexing of the other objects. With a doubly linked list (with previous and next pointers) we can remove a single item without touching the rest.
+For example, if we have a sequence of objects and we want to delete one from it using an array is too costly because removing an item in an array causes the re-indexing of the other objects. With a doubly linked list (with previous and next pointers) we can remove a single item without touching the rest.
 
 # Algorithm
 
@@ -47,7 +47,7 @@ There are three basic design goals that we should strive for in a program:
 
 1. Try to save time (Time complexity).
 2. Try to save space (Space complexity).
-3. Try to have face.
+3. Try to save face.
 
 We want to “save face” by preventing the program from locking up or generating reams of garbled data.
 
@@ -59,7 +59,7 @@ The limiting behavior of the complexity as size increases is called the asymptot
 
 ### Space complexity
 
-The space complexity of a program is the amount of memory it needs to run to completion. The space need by a program has the following components:
+The space complexity of a program is the amount of memory it needs to run to completion. The space needed by a program has the following components:
 
 -   Instruction space: the space needed to store the compiled version of the program instructions
 
