@@ -17,7 +17,7 @@ typedef struct node Node;
  * @return pointer to new Node
 */
 Node* createNode(int value) {
-    Node* newNode = (Node *) malloc(sizeof(Node));
+    Node* newNode = malloc(sizeof(Node));
     newNode->data = value;
     newNode->next = NULL;
 

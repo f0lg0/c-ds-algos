@@ -22,7 +22,7 @@ int nodesCount = 0; // total number of nodes in the binary tree
  * @return a pointer to that newly created node
 */
 Node* createNode(int val) {
-    Node *temp = (Node *)malloc(sizeof(Node));
+    Node *temp = malloc(sizeof(Node));
     temp->data = val;
     temp->leftChild = NULL;
     temp->rightChild = NULL;

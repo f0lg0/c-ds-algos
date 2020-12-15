@@ -19,7 +19,7 @@ Item *last = NULL;
  * @return a pointer to that Item
 */
 Item* createItem(int val) {
-    Item *item = (Item *)malloc(sizeof(Item)); 
+    Item *item = malloc(sizeof(Item)); 
     item->data = val;
 
     return item;
