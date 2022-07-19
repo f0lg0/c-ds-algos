@@ -122,7 +122,8 @@ void delete(struct node** tree, uint32_t x) {
         } else if ((*tree)->left != NULL && (*tree)->right != NULL) {
             // case 3: has 2 children
             printf("node has 2 children: right at %p and left at %p\n", (*tree)->right, (*tree)->left);
-            
+
+            // TODO
         } else {
             // case 2: has one child
             if ((*tree)->left != NULL) {
@@ -163,7 +164,7 @@ int32_t main() {
     insert(&root, 3, root);
     insert(&root, 1, root);
     insert(&root, 99, root);
-    // insert(&root, 5, root);
+    insert(&root, 5, root);
 
     traverse(root);
 
