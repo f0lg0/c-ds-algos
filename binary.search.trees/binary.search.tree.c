@@ -9,8 +9,6 @@ struct node {
     struct node* right;
 };
 
-struct node* TEST = NULL;
-
 struct node* create_node(uint32_t item) {
     struct node* tmp = malloc(sizeof(struct node));
     if (tmp == NULL) return NULL;
@@ -62,7 +60,7 @@ struct node* max(struct node* root) {
 void traverse(struct node* root) {
     if (root != NULL) {
         traverse(root->left);
-        printf("node at %p with item %d\n", root, root->item);
+        printf("traversing: node at %p with item %d\n", root, root->item);
         traverse(root->right);
     }
 }
@@ -75,12 +73,10 @@ void insert(struct node** tree, uint32_t x, struct node* parent) {
         tmp->item = x;
         tmp->left = tmp->right = NULL;
         tmp->parent = parent;
-        printf("node created: addr %p value %d and parent is at %p with item %d\n", tmp, tmp->item, tmp->parent, tmp->parent->item);
+        printf("node created at %p value %d and parent is at %p with item %d\n", tmp, tmp->item, tmp->parent, tmp->parent->item);
         
         // link into parent's record
         *tree = tmp;
-        if (x == 5)
-            TEST = *tree;
         return;
     }
 
@@ -106,7 +102,6 @@ void delete(struct node** tree, uint32_t x) {
      * */
 
     struct node* target = search((*tree), x);
-    printf("found note at %p with value %d\n", target, target->item);
     
     // tmp pointer so we can call free on the deleted node
     struct node* tmp = target;
@@ -122,22 +117,15 @@ void delete(struct node** tree, uint32_t x) {
             target->parent->right = NULL;
         }
 
-        printf("freeing node at %p\n", tmp);
         free(tmp);
     } else if (target->left != NULL && target->right != NULL) {
         // case 3: has 2 children
-        printf("node has 2 children: right at %p and left at %p and has item %d\n", target->right, target->left, target->item);
 
         // get to the leftmost node in the right branch (min node of right branch)
         struct node* lnrb = min(target->right);
-        printf("lnrb is at %p with item %d\n", lnrb, lnrb->item);
-
         target->item = lnrb->item;
+
         delete(&lnrb, lnrb->item);
-
-
-        printf("node has now 2 children: right at %p and left at %p BUT ITEM is %d\n", target->right, target->left, target->item);
-
     } else {
         // case 2: has one child
         if (target->left != NULL) {
@@ -156,29 +144,25 @@ void delete(struct node** tree, uint32_t x) {
             }
         }
 
-        printf("freeing node at %p\n", tmp);
         free(tmp);
     }
 }
 
 int32_t main() {
-    struct node* root = create_node(10);
+    struct node* root = create_node(5);
     printf("root at %p with value %d\n", root, root->item);
 
     insert(&root, 12, NULL);
-    insert(&root, 6, NULL);
+    insert(&root, 2, NULL);
     insert(&root, 3, NULL);
     insert(&root, 1, NULL);
-    insert(&root, 99, NULL);
-    insert(&root, 5, NULL);
-    
-    insert(&TEST, 7, TEST);
-    insert(&TEST, 2, TEST);
+    insert(&root, 21, NULL);
+    insert(&root, 9, NULL);
+    insert(&root, 25, NULL);
+    insert(&root, 19, NULL);
 
     traverse(root);
-
-    delete(&root, 3);
-
+    delete(&root, 12);
     traverse(root);
 
     return 0;
