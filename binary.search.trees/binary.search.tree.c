@@ -125,21 +125,20 @@ void delete(struct node** tree, uint32_t x) {
             
         } else {
             // case 2: has one child
-            
             if ((*tree)->left != NULL) {
-                printf("node has a child on the left at %p\n", (*tree)->left);
-
                 // deciding where to link the grandchild node
                 if ((*tree)->parent->left == *tree) {
-                    printf("the to be deleted node was on the left\n");
                     (*tree)->parent->left = (*tree)->left;
                 } else {
-                    printf("the to be deleted node was on the left\n");
                     (*tree)->parent->right = (*tree)->left;
                 }
-                printf("now node parent has left %p and rigth %p\n", (*tree)->parent->left, (*tree)->parent->right);
             } else {
-                printf("node has a child on the right at %p\n", (*tree)->right);
+                // deciding where to link the grandchild node
+                if ((*tree)->parent->left == *tree) {
+                    (*tree)->parent->left = (*tree)->right;
+                } else {
+                    (*tree)->parent->right = (*tree)->right;
+                }
             }
         }
 
