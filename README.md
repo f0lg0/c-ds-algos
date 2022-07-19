@@ -28,6 +28,7 @@ English is not my first language so if you find errors feel free to fix them, I 
 
 * [Introduction](https://github.com/f0lg0/c-ds-algos/blob/main/basic.concepts.md)
 * [Binary trees](https://github.com/f0lg0/c-ds-algos/blob/main/binary.trees/explaination.md)
+* [Binary search trees](https://github.com/f0lg0/c-ds-algos/blob/main/binary.search.trees)
 * [Double Linked Lists](https://github.com/f0lg0/c-ds-algos/blob/main/double.linked.lists/explaination.md)
 * [Graph](https://github.com/f0lg0/c-ds-algos/blob/main/graphs/explaination.md)
 * [Linked Lists](https://github.com/f0lg0/c-ds-algos/blob/main/linked.lists/explaination.md)
