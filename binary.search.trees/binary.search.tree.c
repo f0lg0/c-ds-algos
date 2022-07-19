@@ -9,6 +9,8 @@ struct node {
     struct node* right;
 };
 
+struct node* TEST = NULL;
+
 struct node* create_node(uint32_t item) {
     struct node* tmp = malloc(sizeof(struct node));
     if (tmp == NULL) return NULL;
@@ -42,7 +44,7 @@ struct node* min(struct node* root) {
 
     while (min->left != NULL)
         min = min->left;
-
+    
     return min;
 }
 
@@ -73,9 +75,12 @@ void insert(struct node** tree, uint32_t x, struct node* parent) {
         tmp->item = x;
         tmp->left = tmp->right = NULL;
         tmp->parent = parent;
+        printf("node created: addr %p value %d and parent is at %p with item %d\n", tmp, tmp->item, tmp->parent, tmp->parent->item);
         
         // link into parent's record
         *tree = tmp;
+        if (x == 5)
+            TEST = *tree;
         return;
     }
 
@@ -86,8 +91,6 @@ void insert(struct node** tree, uint32_t x, struct node* parent) {
 }
 
 void delete(struct node** tree, uint32_t x) {
-    printf("looking for %d...\n", x);
-
     /*
      * 3 cases:
      *  1. node has no children --> clear the pointer to this node, free mem
@@ -101,70 +104,76 @@ void delete(struct node** tree, uint32_t x) {
      *  - check children amount
      *  - procede with specified deletion method
      * */
-    
-    if ((*tree)->item == x) {
-        // found the node
-        printf("found note at %p with value %d\n", *tree, (*tree)->item);
-        
-        // tmp pointer so we can call free on the deleted node
-        struct node* tmp = *tree;
-        
-        // case 1: no children
-        if ((*tree)->left == NULL && (*tree)->right == NULL) {
-            // procede checking where the node is (right or left of parent)
-            // since we have already found the node, checking if the child item matches x is redundant
-            
-            if ((*tree)->parent->left != NULL) {
-                (*tree)->parent->left = NULL;
-            } else {
-                (*tree)->parent->right = NULL;
-            }
-        } else if ((*tree)->left != NULL && (*tree)->right != NULL) {
-            // case 3: has 2 children
-            printf("node has 2 children: right at %p and left at %p\n", (*tree)->right, (*tree)->left);
 
-            // TODO
+    struct node* target = search((*tree), x);
+    printf("found note at %p with value %d\n", target, target->item);
+    
+    // tmp pointer so we can call free on the deleted node
+    struct node* tmp = target;
+    
+    // case 1: no children
+    if (target->left == NULL && target->right == NULL) {
+        // procede checking where the node is (right or left of parent)
+        // since we have already found the node, checking if the child item matches x is redundant
+        
+        if (target->parent->left != NULL) {
+            target->parent->left = NULL;
         } else {
-            // case 2: has one child
-            if ((*tree)->left != NULL) {
-                // deciding where to link the grandchild node
-                if ((*tree)->parent->left == *tree) {
-                    (*tree)->parent->left = (*tree)->left;
-                } else {
-                    (*tree)->parent->right = (*tree)->left;
-                }
+            target->parent->right = NULL;
+        }
+
+        printf("freeing node at %p\n", tmp);
+        free(tmp);
+    } else if (target->left != NULL && target->right != NULL) {
+        // case 3: has 2 children
+        printf("node has 2 children: right at %p and left at %p and has item %d\n", target->right, target->left, target->item);
+
+        // get to the leftmost node in the right branch (min node of right branch)
+        struct node* lnrb = min(target->right);
+        printf("lnrb is at %p with item %d\n", lnrb, lnrb->item);
+
+        target->item = lnrb->item;
+        delete(&lnrb, lnrb->item);
+
+
+        printf("node has now 2 children: right at %p and left at %p BUT ITEM is %d\n", target->right, target->left, target->item);
+
+    } else {
+        // case 2: has one child
+        if (target->left != NULL) {
+            // deciding where to link the grandchild node
+            if (target->parent->left == target) {
+                target->parent->left = target->left;
             } else {
-                // deciding where to link the grandchild node
-                if ((*tree)->parent->left == *tree) {
-                    (*tree)->parent->left = (*tree)->right;
-                } else {
-                    (*tree)->parent->right = (*tree)->right;
-                }
+                target->parent->right = target->left;
+            }
+        } else {
+            // deciding where to link the grandchild node
+            if (target->parent->left == target) {
+                target->parent->left = target->right;
+            } else {
+                target->parent->right = target->right;
             }
         }
 
-        printf("freeing node at %p\n", (tmp));
+        printf("freeing node at %p\n", tmp);
         free(tmp);
-
-        return;
     }
-
-    if (x < (*tree)->item)
-        delete(&((*tree)->left), x);
-    else
-        delete(&((*tree)->right), x);
 }
 
 int32_t main() {
     struct node* root = create_node(10);
     printf("root at %p with value %d\n", root, root->item);
 
-    insert(&root, 12, root);
-    insert(&root, 6, root);
-    insert(&root, 3, root);
-    insert(&root, 1, root);
-    insert(&root, 99, root);
-    insert(&root, 5, root);
+    insert(&root, 12, NULL);
+    insert(&root, 6, NULL);
+    insert(&root, 3, NULL);
+    insert(&root, 1, NULL);
+    insert(&root, 99, NULL);
+    insert(&root, 5, NULL);
+    
+    insert(&TEST, 7, TEST);
+    insert(&TEST, 2, TEST);
 
     traverse(root);
 
