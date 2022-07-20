@@ -22,8 +22,12 @@ int32_t pq_get_young_child(uint32_t k) {
 
 void pq_swap(struct priority_queue* q, uint32_t pos, int32_t parent) {
     struct element tmp = q->q[pos];
-    q->q[pos] = q->q[parent];
-    q->q[parent] = tmp;
+
+    q->q[pos].letter = q->q[parent].letter;
+    q->q[pos].freq = q->q[parent].freq;
+
+    q->q[parent].letter = tmp.letter;
+    q->q[parent].freq = tmp.freq;
 }
 
 void bubble_up(struct priority_queue* q, uint32_t pos) {
@@ -69,15 +73,19 @@ void pq_insert(struct priority_queue* q, uint32_t pqsize, struct element* x) {
     q->n = (q->n) + 1;
 }
 
-int32_t extract_min(struct priority_queue* q) {
-    int32_t min = -1;
+struct element* extract_min(struct priority_queue* q) {
+    printf("called\n");
+
+    struct element* min = NULL;
 
     if (q->n <= 0) {
         printf("Warning: empty priority queue.\n");
     } else {
-        min = q->q[0].freq;
+        min = &(q->q[0]);
+        
+        q->q[0].letter = q->q[(q->n) - 1].letter;
+        q->q[0].freq = q->q[(q->n) - 1].freq;
 
-        q->q[0] = q->q[(q->n) - 1];
         q->n = q->n - 1;
 
         bubble_down(q, 0);
@@ -90,9 +98,17 @@ void make_heap(struct priority_queue* q, uint32_t pqsize, struct element* data, 
     pq_init(q, pqsize);
 
     for (uint32_t i = 0; i < n; i++)
-        pq_insert(q, pqsize, &data[i]);
+        pq_insert(q, pqsize, &(data[i]));
 }
 
 void destroy_heap(struct priority_queue* q) {
+    // debug
+    printf("q->n: %d\n", q->n);
+    for (uint32_t i = 0; i < q->n; i++) {
+        printf("i: %d\n", i);
+        struct element* el = extract_min(q);
+        printf("%c:%d\n", el->letter, el->freq);
+    }
+
     free(q->q);
 }
