@@ -42,5 +42,7 @@ int32_t main() {
 
     printf("\n");
 
+    destroy_heap(&q);
+
     return 0;
 }
