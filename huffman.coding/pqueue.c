@@ -93,12 +93,21 @@ void make_heap(struct priority_queue* q, uint32_t pqsize, struct element* data, 
         pq_insert(q, pqsize, &(data[i]));
 }
 
-void heapsort(struct priority_queue* q) {
+struct elements_wrapper* heapsort(struct priority_queue* q) {
     uint32_t tmp = q->n;
+
+    struct elements_wrapper* ret = malloc(sizeof(struct elements_wrapper));
+    struct element* arr = malloc(sizeof(struct element) * tmp);
+
+    ret->array = arr;
+    ret->len = tmp;
+
     for (uint32_t i = 0; i < tmp; i++) {
         struct element* el = extract_min(q);
-        printf("EXTRACTED: %c:%d\n", el->letter, el->freq);
+        ret->array[i] = *el;
     }
+
+    return ret;
 }
 
 void destroy_heap(struct priority_queue* q) {

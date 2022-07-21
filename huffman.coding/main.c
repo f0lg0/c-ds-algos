@@ -5,11 +5,6 @@
 
 #include "pqueue.h"
 
-struct elements_wrapper {
-    struct element* array;
-    uint32_t len;
-};
-
 struct elements_wrapper craft_freq_array(char* str, uint32_t str_length) {
     // starting with a single element array
     struct element* arr = malloc(sizeof(struct element));
@@ -67,12 +62,13 @@ int32_t main() {
     
     struct priority_queue q;
     make_heap(&q, els.len, els.array, els.len);
+    
+    // sorting in increasing order of frequency
+    struct elements_wrapper* sorted = heapsort(&q);
 
-    for (int32_t i = 0; i < q.n; i++)
-        printf("%c:%d ", q.q[i]->letter, q.q[i]->freq);
+    for (uint32_t i = 0; i < sorted->len; i++)
+        printf("%c:%d\n", sorted->array[i].letter, sorted->array[i].freq);
 
-    printf("\n");
-    heapsort(&q);
     destroy_heap(&q); 
 
     return 0;
