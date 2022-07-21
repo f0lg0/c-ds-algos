@@ -20,6 +20,7 @@ struct priority_queue {
 
 void make_heap(struct priority_queue* q, uint32_t pqsize, struct element* data, uint32_t n);
 struct elements_wrapper* heapsort(struct priority_queue* q);
+void destroy_elements_wrapper(struct elements_wrapper* elw);
 void destroy_heap(struct priority_queue* q);
 
 #endif

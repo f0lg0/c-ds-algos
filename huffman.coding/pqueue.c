@@ -110,6 +110,11 @@ struct elements_wrapper* heapsort(struct priority_queue* q) {
     return ret;
 }
 
+void destroy_elements_wrapper(struct elements_wrapper* elw) {
+    free(elw->array);
+    free(elw);
+}
+
 void destroy_heap(struct priority_queue* q) {
     free(q->q);
 }

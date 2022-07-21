@@ -5,7 +5,7 @@
 
 #include "pqueue.h"
 
-struct elements_wrapper craft_freq_array(char* str, uint32_t str_length) {
+struct elements_wrapper* craft_freq_array(char* str, uint32_t str_length) {
     // starting with a single element array
     struct element* arr = malloc(sizeof(struct element));
     uint32_t idx = 0;
@@ -41,34 +41,32 @@ struct elements_wrapper craft_freq_array(char* str, uint32_t str_length) {
 
     free(tmp);
 
-    struct elements_wrapper ret = {
-        .array = arr,
-        .len = idx
-    };
+    struct elements_wrapper* ret = malloc(sizeof(struct elements_wrapper));
+    ret->array = arr;
+    ret->len = idx;
 
     return ret;
 }
+
 
 int32_t main() {
     char input[] = "BCAADDDCCACACAC";
     uint32_t input_length = strlen(input);
     printf("input: %s\n  length: %d\n  size: %ld\n", input, input_length, sizeof(input));
 
-    struct elements_wrapper els = craft_freq_array(input, input_length);
-    
-    for (uint32_t i = 0; i < els.len; i++) {
-        printf("letter: %c freq: %d\n", els.array[i].letter, els.array[i].freq);
-    }
+    struct elements_wrapper* els = craft_freq_array(input, input_length);
     
     struct priority_queue q;
-    make_heap(&q, els.len, els.array, els.len);
+    make_heap(&q, els->len, els->array, els->len);
     
     // sorting in increasing order of frequency
     struct elements_wrapper* sorted = heapsort(&q);
 
     for (uint32_t i = 0; i < sorted->len; i++)
         printf("%c:%d\n", sorted->array[i].letter, sorted->array[i].freq);
-
+    
+    destroy_elements_wrapper(sorted);
+    destroy_elements_wrapper(els);
     destroy_heap(&q); 
 
     return 0;
