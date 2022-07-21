@@ -9,11 +9,12 @@ struct element {
 };
 
 struct priority_queue {
-    struct element* q;
+    struct element** q;
     uint32_t n;
 };
 
 void make_heap(struct priority_queue* q, uint32_t pqsize, struct element* data, uint32_t n);
+void heapsort(struct priority_queue* q);
 void destroy_heap(struct priority_queue* q);
 
 #endif

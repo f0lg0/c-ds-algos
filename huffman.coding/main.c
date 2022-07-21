@@ -69,9 +69,10 @@ int32_t main() {
     make_heap(&q, els.len, els.array, els.len);
 
     for (int32_t i = 0; i < q.n; i++)
-        printf("%c:%d ", q.q[i].letter, q.q[i].freq);
+        printf("%c:%d ", q.q[i]->letter, q.q[i]->freq);
 
     printf("\n");
+    heapsort(&q);
     destroy_heap(&q); 
 
     return 0;
