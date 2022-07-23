@@ -67,9 +67,9 @@ int32_t main() {
     encode(tree, arr, 0);
     // traverse_htree(tree);
 
+    destroy_htree(tree);
     destroy_elements_wrapper(els);
     destroy_heap(&q); 
-    // TODO: destroy tree
 
     return 0;
 }

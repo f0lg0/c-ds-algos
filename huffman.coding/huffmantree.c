@@ -55,3 +55,12 @@ void encode(struct element* root, uint8_t* arr, uint8_t top) {
         printf("\n");
     }
 }
+
+void destroy_htree(struct element* root) {
+    if (root == NULL) return;
+
+    destroy_htree(root->left);
+    destroy_htree(root->right);
+    // only freeing allocated nodes (the ones with no letters in them)
+    if (!root->letter) free(root);
+}
