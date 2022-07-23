@@ -8,7 +8,6 @@
 void traverse_htree(struct element* root) {
     if (root == NULL) return;
 
-    // printf("called on node (%c:%d) at %p with left: %p and right %p\n", root->letter, root->freq, root, root->left, root->right);
     traverse_htree(root->left);
     printf("node at %p:\n\tletter: %c\n\tfreq: %d\n\tleft: %p\n\tright: %p\n\n", root, root->letter, root->freq, root->left, root->right);
     traverse_htree(root->right);
@@ -18,6 +17,18 @@ int8_t check_size_one(struct priority_queue* q) {
     return (q->n == 1);
 }
 
+uint32_t htree_height(struct element* root) {
+    if (root == NULL) return 0;
+
+    uint32_t left_height = htree_height(root->left);
+    uint32_t right_height = htree_height(root->right);
+
+    if (left_height >= right_height)
+        return left_height + 1;
+    else
+        return right_height + 1;
+}
+
 struct element* make_htree(struct priority_queue* q) {
     struct element* ret = NULL;
 
@@ -25,16 +36,29 @@ struct element* make_htree(struct priority_queue* q) {
         struct element* node = malloc(sizeof(struct element));
         node->left = extract_min(q);
         node->right = extract_min(q);
-        // printf(">> extracted 2 (left: %p (%c:%d), right: %p (%c:%d)), now q->n is: %d\n", node->left, node->left->letter, node->left->freq, node->right, node->right->letter, node->right->freq, q->n);
         node->freq = node->left->freq + node->right->freq;
         node->letter = '\0';
 
         pq_insert(q, (q->n) + 1, node);
-        // printf(">> insert (%c:%d with left %c:%d and right %c:%d), now q->n is: %d\n", node->letter, node->freq, node->left->letter, node->left->freq, node->right->letter, node->right->freq, q->n);
         ret = node;
     }
     
     return ret;
+}
+
+void decode(struct element* root, uint8_t* arr, uint8_t top) {
+    struct element* target = root;
+
+    for (uint32_t i = 0; i < top; i++) {
+        if (arr[i] == 0) {
+            target = target->left;
+        } else {
+            target = target->right;
+        }
+    }
+
+    // we have reached the letter
+    printf("%c\n", target->letter);
 }
 
 void encode(struct element* root, uint8_t* arr, uint8_t top) {
@@ -51,7 +75,7 @@ void encode(struct element* root, uint8_t* arr, uint8_t top) {
 
         for (uint32_t i = 0; i < top; i++)
             printf("%d", arr[i]);
-
+        
         printf("\n");
     }
 }

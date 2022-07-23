@@ -63,7 +63,7 @@ int32_t main() {
     make_heap(&q, els->len, els->array, els->len);
     
     struct element* tree = make_htree(&q);
-    uint8_t arr[50]; // TODO: allocate proper size
+    uint8_t arr[htree_height(tree)];
     encode(tree, arr, 0);
     // traverse_htree(tree);
 
