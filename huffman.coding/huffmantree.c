@@ -27,7 +27,7 @@ struct element* make_htree(struct priority_queue* q) {
         node->right = extract_min(q);
         // printf(">> extracted 2 (left: %p (%c:%d), right: %p (%c:%d)), now q->n is: %d\n", node->left, node->left->letter, node->left->freq, node->right, node->right->letter, node->right->freq, q->n);
         node->freq = node->left->freq + node->right->freq;
-        node->letter = '$';
+        node->letter = '\0';
 
         pq_insert(q, (q->n) + 1, node);
         // printf(">> insert (%c:%d with left %c:%d and right %c:%d), now q->n is: %d\n", node->letter, node->freq, node->left->letter, node->left->freq, node->right->letter, node->right->freq, q->n);
