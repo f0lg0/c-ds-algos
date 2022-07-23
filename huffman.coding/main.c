@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "pqueue.h"
+#include "huffmantree.h"
 
 struct elements_wrapper* craft_freq_array(char* str, uint32_t str_length) {
     // starting with a single element array
@@ -30,7 +31,9 @@ struct elements_wrapper* craft_freq_array(char* str, uint32_t str_length) {
 
             struct element el = {
                 .letter = tmp[i],
-                .freq = c
+                .freq = c,
+                .left = NULL,
+                .right = NULL
             };
 
             arr[idx] = el;
@@ -58,14 +61,9 @@ int32_t main() {
     
     struct priority_queue q;
     make_heap(&q, els->len, els->array, els->len);
-    
-    // sorting in increasing order of frequency
-    struct elements_wrapper* sorted = heapsort(&q);
 
-    for (uint32_t i = 0; i < sorted->len; i++)
-        printf("%c:%d\n", sorted->array[i].letter, sorted->array[i].freq);
-    
-    destroy_elements_wrapper(sorted);
+    traverse_htree(make_htree(&q));
+
     destroy_elements_wrapper(els);
     destroy_heap(&q); 
 
