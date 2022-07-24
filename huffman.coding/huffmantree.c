@@ -46,29 +46,54 @@ struct element* make_htree(struct priority_queue* q) {
     return ret;
 }
 
-void decode(struct element* root, uint8_t* arr, uint8_t top) {
+void decompress(struct element* root, const char* filename) {
+    FILE* src = fopen(filename, "rb");
+    ssize_t len;
+    
+    fseek(src, 0, SEEK_END);
+    len = ftell(src);
+    rewind(src);
+
+    uint8_t* buf = malloc(sizeof(uint8_t) * len);
+    fread(buf, len, 1, src);
+    fclose(src);
+
+    for (uint32_t i = 0; i < len; i++)
+        printf("%d", buf[i]);
+
+    printf("\n");
+
     struct element* target = root;
 
-    for (uint32_t i = 0; i < top; i++) {
-        if (arr[i] == 0) {
+    for (uint32_t i = 0; i < len; i++) {
+        if (target->letter) {
+            // we have reached the letter
+            for (uint32_t j = 0; j < target->freq; j++)
+                printf("%c", target->letter);
+
+            // starting again from the top
+            target = root;
+        }
+        if (buf[i] == 0) {
             target = target->left;
         } else {
             target = target->right;
         }
     }
-
-    // we have reached the letter
-    printf("%c\n", target->letter);
+    
+    printf("\n");
 }
 
-void encode(struct element* root, uint8_t* arr, uint8_t top) {
+void encode(struct element* root, uint8_t* arr, uint8_t top, FILE* out) {
+    // TODO: we need to write to file according to the input, we can't just write following the order we get here
+    //
     if (root->left) {
         arr[top] = 0;
-        encode(root->left, arr, top + 1);
+        encode(root->left, arr, top + 1, out);
     }
     if (root->right) {
         arr[top] = 1;
-        encode(root->right, arr, top + 1);
+        encode(root->right, arr, top + 1, out);
     }
     if (root->left == NULL && root->right == NULL) {
         printf("> %c  | ", root->letter);
@@ -77,7 +102,17 @@ void encode(struct element* root, uint8_t* arr, uint8_t top) {
             printf("%d", arr[i]);
         
         printf("\n");
+
+        // write to file
+        fwrite(arr, sizeof(uint8_t), top, out);
     }
+}
+
+void compress(struct element* root, const char* outfile) {
+    uint8_t arr[htree_height(root)];
+    FILE* fptr = fopen(outfile, "wb");
+    encode(root, arr, 0, fptr);
+    fclose(fptr);
 }
 
 void destroy_htree(struct element* root) {

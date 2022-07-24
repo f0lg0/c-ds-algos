@@ -63,9 +63,10 @@ int32_t main() {
     make_heap(&q, els->len, els->array, els->len);
     
     struct element* tree = make_htree(&q);
-    uint8_t arr[htree_height(tree)];
-    encode(tree, arr, 0);
-    // traverse_htree(tree);
+
+    const char* file = "./compressed.b";
+    compress(tree, file);
+    decompress(tree, file);
 
     destroy_htree(tree);
     destroy_elements_wrapper(els);
