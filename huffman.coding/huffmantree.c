@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "huffmantree.h"
 #include "pqueue.h"
@@ -125,7 +126,24 @@ void encode(struct element* root, uint8_t* arr, uint8_t top, struct mapped_lette
     }
 }
 
-void compress(struct element* root, const char* outfile) {
+void dump_compressed(char* input, const char* outfile, struct mapped_letter* start) {
+    for (uint32_t i = 0; i < strlen(input); i++) {
+        struct mapped_letter* tmp = start;
+        while (*(tmp->letter) != input[i])
+            tmp = tmp->next;
+
+        // debug
+        // WTF??? THEY ARE ALL 1s
+        for (uint32_t j = 0; j < tmp->code_size; j++)
+            printf("%d", tmp->code[j]);
+
+        printf("|");
+    }
+
+    printf("\n");
+}
+
+void compress(struct element* root, const char* outfile, char* input) {
     uint8_t arr[htree_height(root)];
     FILE* fptr = fopen(outfile, "wb");
 
@@ -141,7 +159,7 @@ void compress(struct element* root, const char* outfile) {
     encode(root, arr, 0, start);
 
     // now we have a linked list of letters mapped to their code, we can use it to write to file
-    // TODO: write to file
+    dump_compressed(input, outfile, start->next); // skipping head
     
     // free the linked list
     struct mapped_letter* tmp = NULL;
