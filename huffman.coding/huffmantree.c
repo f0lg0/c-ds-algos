@@ -113,7 +113,11 @@ void encode(struct element* root, uint8_t* arr, uint8_t top, struct mapped_lette
 
         struct mapped_letter* new = malloc(sizeof(struct mapped_letter));
         new->letter = &(root->letter);
-        new->code = arr;
+
+        uint8_t* copy = malloc(sizeof(uint8_t) * top);
+        memcpy(copy, arr, sizeof(uint8_t) * top);
+        new->code = copy;
+
         new->code_size = top;
         new->next = NULL;
         
@@ -133,7 +137,6 @@ void dump_compressed(char* input, const char* outfile, struct mapped_letter* sta
             tmp = tmp->next;
 
         // debug
-        // WTF??? THEY ARE ALL 1s
         for (uint32_t j = 0; j < tmp->code_size; j++)
             printf("%d", tmp->code[j]);
 
@@ -157,6 +160,7 @@ void compress(struct element* root, const char* outfile, char* input) {
     start->next = NULL;
 
     encode(root, arr, 0, start);
+    
 
     // now we have a linked list of letters mapped to their code, we can use it to write to file
     dump_compressed(input, outfile, start->next); // skipping head
@@ -166,6 +170,7 @@ void compress(struct element* root, const char* outfile, char* input) {
     while (start != NULL) {
         tmp = start;
         start = start->next;
+        free(tmp->code);
         free(tmp);
     }
 
