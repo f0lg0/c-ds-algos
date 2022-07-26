@@ -131,7 +131,8 @@ void encode(struct element* root, uint8_t* arr, uint8_t top, struct mapped_lette
 }
 
 void dump_compressed(char* input, const char* outfile, struct mapped_letter* start) {
-    for (uint32_t i = 0; i < strlen(input); i++) {
+    uint32_t len = strlen(input);
+    for (uint32_t i = 0; i < len; i++) {
         struct mapped_letter* tmp = start;
         while (*(tmp->letter) != input[i])
             tmp = tmp->next;
