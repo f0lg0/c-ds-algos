@@ -5,6 +5,13 @@
 #include "huffmantree.h"
 #include "pqueue.h"
 
+struct mapped_letter {
+    const char* letter;
+    uint8_t* code;
+    uint32_t code_size;
+    struct mapped_letter* next;
+};
+
 void traverse_htree(struct element* root) {
     if (root == NULL) return;
 
@@ -62,7 +69,8 @@ void decompress(struct element* root, const char* filename) {
         printf("%d", buf[i]);
 
     printf("\n");
-
+    
+    /*
     struct element* target = root;
 
     for (uint32_t i = 0; i < len; i++) {
@@ -82,18 +90,17 @@ void decompress(struct element* root, const char* filename) {
     }
     
     printf("\n");
+    */
 }
 
-void encode(struct element* root, uint8_t* arr, uint8_t top, FILE* out) {
-    // TODO: we need to write to file according to the input, we can't just write following the order we get here
-    //
+void encode(struct element* root, uint8_t* arr, uint8_t top, struct mapped_letter* start) {
     if (root->left) {
         arr[top] = 0;
-        encode(root->left, arr, top + 1, out);
+        encode(root->left, arr, top + 1, start);
     }
     if (root->right) {
         arr[top] = 1;
-        encode(root->right, arr, top + 1, out);
+        encode(root->right, arr, top + 1, start);
     }
     if (root->left == NULL && root->right == NULL) {
         printf("> %c  | ", root->letter);
@@ -103,15 +110,47 @@ void encode(struct element* root, uint8_t* arr, uint8_t top, FILE* out) {
         
         printf("\n");
 
-        // write to file
-        fwrite(arr, sizeof(uint8_t), top, out);
+        struct mapped_letter* new = malloc(sizeof(struct mapped_letter));
+        new->letter = &(root->letter);
+        new->code = arr;
+        new->code_size = top;
+        new->next = NULL;
+        
+        // reaching the end of the linked list and appending 
+        struct mapped_letter* tmp = start; 
+        while (tmp->next != NULL)
+            tmp = tmp->next;
+
+        tmp->next = new;
     }
 }
 
 void compress(struct element* root, const char* outfile) {
     uint8_t arr[htree_height(root)];
     FILE* fptr = fopen(outfile, "wb");
-    encode(root, arr, 0, fptr);
+
+    // for conveinence, im going to store the letters mapped to their code (C:001) in a linked list
+    // ofc, an hash table would be better but I don't have time to implement one
+    
+    struct mapped_letter* start = malloc(sizeof(struct mapped_letter));
+    start->letter = '\0';
+    start->code = NULL;
+    start->code_size = 0;
+    start->next = NULL;
+
+    encode(root, arr, 0, start);
+
+    // now we have a linked list of letters mapped to their code, we can use it to write to file
+    // TODO: write to file
+    
+    // free the linked list
+    struct mapped_letter* tmp = NULL;
+    while (start != NULL) {
+        tmp = start;
+        start = start->next;
+        free(tmp);
+    }
+
     fclose(fptr);
 }
 
