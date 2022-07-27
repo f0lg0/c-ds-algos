@@ -130,21 +130,15 @@ void encode(struct element* root, uint8_t* arr, uint8_t top, struct mapped_lette
     }
 }
 
-void dump_compressed(char* input, const char* outfile, struct mapped_letter* start) {
+void dump_compressed(char* input, FILE* fptr, struct mapped_letter* start) {
     uint32_t len = strlen(input);
     for (uint32_t i = 0; i < len; i++) {
         struct mapped_letter* tmp = start;
         while (*(tmp->letter) != input[i])
             tmp = tmp->next;
 
-        // debug
-        for (uint32_t j = 0; j < tmp->code_size; j++)
-            printf("%d", tmp->code[j]);
-
-        printf("|");
+        fwrite(tmp->code, sizeof(uint8_t), tmp->code_size, fptr);
     }
-
-    printf("\n");
 }
 
 void compress(struct element* root, const char* outfile, char* input) {
@@ -164,7 +158,7 @@ void compress(struct element* root, const char* outfile, char* input) {
     
 
     // now we have a linked list of letters mapped to their code, we can use it to write to file
-    dump_compressed(input, outfile, start->next); // skipping head
+    dump_compressed(input, fptr, start->next); // skipping head
     
     // free the linked list
     struct mapped_letter* tmp = NULL;
