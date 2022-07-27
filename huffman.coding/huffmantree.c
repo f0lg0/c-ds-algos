@@ -92,6 +92,7 @@ void decompress(struct element* root, const char* filename) {
     }
 
     printf("\n");
+    free(buf);
 }
 
 void encode(struct element* root, uint8_t* arr, uint8_t top, struct mapped_letter* start) {
