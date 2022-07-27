@@ -81,6 +81,7 @@ void decompress(struct element* root, const char* filename) {
     
     printf("\ndecompressed: ");
     struct element* target = root;
+
     for (uint32_t i = 0; i < len; i++) {
         if (target->letter) {
             // we have reached a letter
@@ -95,6 +96,8 @@ void decompress(struct element* root, const char* filename) {
         else
             target = target->right;
     }
+    // printing last entered node
+    printf("%c", target->letter);
 
     printf("\n");
     free(buf);
