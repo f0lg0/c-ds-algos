@@ -55,6 +55,8 @@ struct element* make_htree(struct priority_queue* q) {
 }
 
 void decompress(struct element* root, const char* filename) {
+    printf("decompressing...\n");
+
     FILE* src = fopen(filename, "rb");
     ssize_t len;
     
@@ -65,9 +67,29 @@ void decompress(struct element* root, const char* filename) {
     uint8_t* buf = malloc(sizeof(uint8_t) * len);
     fread(buf, len, 1, src);
     fclose(src);
-
+    
+    printf("read stream: ");
     for (uint32_t i = 0; i < len; i++)
         printf("%d", buf[i]);
+
+    printf("\n");
+    
+    printf("decompressed: ");
+    struct element* target = root;
+    for (uint32_t i = 0; i <= len; i++) {
+        if (target->letter) {
+            // we have reached a letter
+            printf("%c", target->letter);
+
+            // starting again from the top
+            target = root;
+        }
+
+        if (buf[i] == 0)
+            target = target->left;
+        else
+            target = target->right;
+    }
 
     printf("\n");
 }
@@ -109,6 +131,8 @@ void encode(struct element* root, uint8_t* arr, uint8_t top, struct mapped_lette
 }
 
 void dump_compressed(char* input, FILE* fptr, struct mapped_letter* start) {
+    printf("compressing...\n");
+
     uint32_t len = strlen(input);
     for (uint32_t i = 0; i < len; i++) {
         struct mapped_letter* tmp = start;
@@ -117,6 +141,8 @@ void dump_compressed(char* input, FILE* fptr, struct mapped_letter* start) {
 
         fwrite(tmp->code, sizeof(uint8_t), tmp->code_size, fptr);
     }
+
+    printf("compressed successfully\n");
 }
 
 void compress(struct element* root, const char* outfile, char* input) {
