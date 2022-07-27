@@ -65,7 +65,7 @@ void decompress(struct element* root, const char* filename) {
     rewind(src);
 
     uint8_t* buf = malloc(sizeof(uint8_t) * len);
-    fread(buf, len, 1, src);
+    fread(buf, sizeof(uint8_t), len, src);
     fclose(src);
     
     printf("read stream: ");
