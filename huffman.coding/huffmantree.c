@@ -96,6 +96,7 @@ void decompress(struct element* root, const char* filename) {
         else
             target = target->right;
     }
+
     // printing last entered node
     printf("%c", target->letter);
 

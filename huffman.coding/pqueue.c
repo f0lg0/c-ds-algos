@@ -37,7 +37,7 @@ void bubble_up(struct priority_queue* q, uint32_t pos) {
 
 void bubble_down(struct priority_queue* q, uint32_t pos) {
     int32_t c = pq_get_young_child(pos);
-    int32_t min_index = pos; // index of lightest child
+    uint32_t min_index = pos; // index of lightest child
 
     for (uint32_t i = 0; i <= 1; i++) {
         if ((c + i) <= q->n) {
