@@ -70,28 +70,6 @@ void decompress(struct element* root, const char* filename) {
         printf("%d", buf[i]);
 
     printf("\n");
-    
-    /*
-    struct element* target = root;
-
-    for (uint32_t i = 0; i < len; i++) {
-        if (target->letter) {
-            // we have reached the letter
-            for (uint32_t j = 0; j < target->freq; j++)
-                printf("%c", target->letter);
-
-            // starting again from the top
-            target = root;
-        }
-        if (buf[i] == 0) {
-            target = target->left;
-        } else {
-            target = target->right;
-        }
-    }
-    
-    printf("\n");
-    */
 }
 
 void encode(struct element* root, uint8_t* arr, uint8_t top, struct mapped_letter* start) {

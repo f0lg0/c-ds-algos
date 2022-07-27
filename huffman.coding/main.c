@@ -66,7 +66,7 @@ int32_t main() {
 
     const char* file = "./compressed.b";
     compress(tree, file, input);
-    // decompress(tree, file);
+    decompress(tree, file);
 
     destroy_htree(tree);
     destroy_elements_wrapper(els);
