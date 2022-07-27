@@ -64,7 +64,7 @@ int32_t main() {
     
     struct element* tree = make_htree(&q);
 
-    const char* file = "./compressed.b";
+    const char* file = "./encoded.b";
     compress(tree, file, input);
     decompress(tree, file);
 
