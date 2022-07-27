@@ -149,9 +149,16 @@ void dump_compressed(char* input, FILE* fptr, struct mapped_letter* start) {
         while (*(tmp->letter) != input[i])
             tmp = tmp->next;
         
-        // we are actually writing uint8_t(s) to the file, so 8 bits per number.
-        // huffman coding is great for big inputs not small ones
+        // we are actually writing uint8_t(s) to the file, so 8 bits per digit.
         // TODO: parse digits in groups of 8 (8 bits), store that in an uint8_t and dump that entirely 
+        // padding will be necessary but since we know the length we can discard whatever comes after that
+
+        /*
+         * 0111110110110100110110110
+         * becomes
+         * 10001111|10110110|10011011|0110 (and add 0s to pad it)
+         * and then dump each part as an integer (first e.g. is 143 decimal)
+         * */
         fwrite(tmp->code, sizeof(uint8_t), tmp->code_size, fptr);
     }
 
