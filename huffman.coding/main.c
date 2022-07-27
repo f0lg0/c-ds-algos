@@ -64,9 +64,8 @@ int32_t main() {
     
     struct element* tree = make_htree(&q);
 
-    const char* file = "./encoded.b";
-    compress(tree, file, input);
-    decompress(tree, file);
+    compress(tree, input);
+    decompress(tree);
 
     destroy_htree(tree);
     destroy_elements_wrapper(els);

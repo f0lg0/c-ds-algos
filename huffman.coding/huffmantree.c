@@ -54,8 +54,8 @@ struct element* make_htree(struct priority_queue* q) {
     return ret;
 }
 
-void decompress(struct element* root, const char* filename) {
-    FILE* src = fopen(filename, "rb");
+void decompress(struct element* root) {
+    FILE* src = fopen("./tmp.b", "rb");
     ssize_t len;
     
     fseek(src, 0, SEEK_END);
@@ -99,6 +99,7 @@ void decompress(struct element* root, const char* filename) {
 
     printf("\n");
     free(buf);
+    remove("./tmp.b");
 }
 
 void encode(struct element* root, uint8_t* arr, uint8_t top, struct mapped_letter* start) {
@@ -137,7 +138,8 @@ void encode(struct element* root, uint8_t* arr, uint8_t top, struct mapped_lette
     }
 }
 
-void dump_compressed(char* input, FILE* fptr, struct mapped_letter* start) {
+// this is for tmp storing the encoded input
+void dump_encoded(char* input, FILE* fptr, struct mapped_letter* start) {
     uint32_t len = strlen(input);
     for (uint32_t i = 0; i < len; i++) {
         struct mapped_letter* tmp = start;
@@ -158,9 +160,9 @@ void dump_compressed(char* input, FILE* fptr, struct mapped_letter* start) {
     }
 }
 
-void compress(struct element* root, const char* outfile, char* input) {
+void compress(struct element* root, char* input) {
     uint8_t arr[htree_height(root)];
-    FILE* fptr = fopen(outfile, "wb");
+    FILE* fptr = fopen("./tmp.b", "wb");
 
     // for conveinence, im going to store the letters mapped to their code (C:001) in a linked list
     // ofc, an hash table would be better but I don't have time to implement one
@@ -175,7 +177,7 @@ void compress(struct element* root, const char* outfile, char* input) {
     
 
     // now we have a linked list of letters mapped to their code, we can use it to write to file
-    dump_compressed(input, fptr, start->next); // skipping head
+    dump_encoded(input, fptr, start->next); // skipping head
     
     // free the linked list
     struct mapped_letter* tmp = NULL;
