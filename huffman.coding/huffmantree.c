@@ -74,7 +74,7 @@ void decompress(struct element* root, const char* filename) {
 
     printf("\n");
     
-    printf("decompressed: ");
+    printf("\ndecompressed: ");
     struct element* target = root;
     for (uint32_t i = 0; i <= len; i++) {
         if (target->letter) {
@@ -131,7 +131,7 @@ void encode(struct element* root, uint8_t* arr, uint8_t top, struct mapped_lette
 }
 
 void dump_compressed(char* input, FILE* fptr, struct mapped_letter* start) {
-    printf("compressing...\n");
+    printf("\ncompressing...\n");
 
     uint32_t len = strlen(input);
     for (uint32_t i = 0; i < len; i++) {

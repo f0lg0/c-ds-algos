@@ -55,7 +55,7 @@ struct elements_wrapper* craft_freq_array(char* str, uint32_t str_length) {
 int32_t main() {
     char input[] = "BCAADDDCCACACAC";
     uint32_t input_length = strlen(input);
-    printf("input: %s\n  length: %d\n  size: %ld\n", input, input_length, sizeof(input));
+    printf("input: %s\n  length: %d\n  size: %ld\n\n", input, input_length, sizeof(input));
 
     struct elements_wrapper* els = craft_freq_array(input, input_length);
     
