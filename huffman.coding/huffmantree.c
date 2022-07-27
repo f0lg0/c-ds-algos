@@ -63,8 +63,13 @@ void decompress(struct element* root, const char* filename) {
     fseek(src, 0, SEEK_END);
     len = ftell(src);
     rewind(src);
-
+    
     uint8_t* buf = malloc(sizeof(uint8_t) * len);
+    if (buf == NULL) {
+        printf("error: failed to allocate memory");
+        return;
+    }
+
     fread(buf, sizeof(uint8_t), len, src);
     fclose(src);
     
@@ -76,7 +81,7 @@ void decompress(struct element* root, const char* filename) {
     
     printf("\ndecompressed: ");
     struct element* target = root;
-    for (uint32_t i = 0; i <= len; i++) {
+    for (uint32_t i = 0; i < len; i++) {
         if (target->letter) {
             // we have reached a letter
             printf("%c", target->letter);
