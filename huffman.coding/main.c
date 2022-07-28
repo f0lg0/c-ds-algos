@@ -53,23 +53,31 @@ struct elements_wrapper* craft_freq_array(char* str, uint32_t str_length) {
 
 
 int32_t main() {
-    char input[] = "BCAADDDCCACACAC";
-    uint32_t input_length = strlen(input);
-    printf("input: %s\n  length: %d\n  size: %ld\n\n", input, input_length, sizeof(input));
+    FILE* input = fopen("./input.txt", "rb");
+    
+    fseek(input, 0, SEEK_END);
+    int32_t input_length = ftell(input);
+    rewind(input);
 
-    struct elements_wrapper* els = craft_freq_array(input, input_length);
+    char* ibuf = malloc(sizeof(char) * input_length);
+    fread(ibuf, sizeof(char), input_length, input);
+    
+    printf("input: %s\n  length: %d\n\n", ibuf, input_length);
+
+    struct elements_wrapper* els = craft_freq_array(ibuf, input_length);
     
     struct priority_queue q;
     make_heap(&q, els->len, els->array, els->len);
     
     struct element* tree = make_htree(&q);
 
-    compress(tree, input);
+    compress(tree, ibuf);
     // decompress(tree);
 
     destroy_htree(tree);
     destroy_elements_wrapper(els);
     destroy_heap(&q); 
+    free(ibuf);
 
     return 0;
 }
