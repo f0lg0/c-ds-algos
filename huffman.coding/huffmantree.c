@@ -176,6 +176,8 @@ void compress_to_file(FILE* src) {
 
     fread(buf, sizeof(char), len, src);
     printf("read stream: %s\n", buf);
+
+    FILE* out = fopen("./compressed.b", "wb");
     
     char dst[9];
     for (uint32_t i = 0; i < len; i++) {
@@ -190,12 +192,16 @@ void compress_to_file(FILE* src) {
                     dst[i] = '0';
             }
 
-            printf("number for %s is %ld\n", dst, strtol(dst, NULL, 2));
+            uint8_t v = strtol(dst, NULL, 2);
+            printf("number for %s is %d\n", dst, v);
+            // we know the max will be 8bits since we are manually parsing 8 bits
+            fwrite(&v, sizeof(v), 1, out);
         }
     }
 
     free(buf);
     remove("./tmp");
+    fclose(out);
 }
 
 void compress(struct element* root, char* input) {
