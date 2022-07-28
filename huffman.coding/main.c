@@ -65,7 +65,7 @@ int32_t main() {
     struct element* tree = make_htree(&q);
 
     compress(tree, input);
-    decompress(tree);
+    // decompress(tree);
 
     destroy_htree(tree);
     destroy_elements_wrapper(els);
