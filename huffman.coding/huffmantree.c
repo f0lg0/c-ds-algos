@@ -166,7 +166,7 @@ void dump_encoded(char* input, FILE* fptr, struct mapped_letter* start) {
 }
 
 uint32_t compress_to_file(FILE* src) {
-    uint32_t len;
+    uint32_t len = 0;
     
     fseek(src, 0, SEEK_END);
     len = ftell(src);
@@ -189,7 +189,7 @@ uint32_t compress_to_file(FILE* src) {
 
     FILE* out = fopen("./compressed.b", "wb");
     
-    char dst[9];
+    char dst[9] = {""};
     for (uint32_t i = 0; i < len; i++) {
         if (i % 8 == 0) {
             strncpy(dst, &buf[i], 8);
