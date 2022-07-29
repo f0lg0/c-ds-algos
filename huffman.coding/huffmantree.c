@@ -173,6 +173,8 @@ uint32_t compress_to_file(FILE* src) {
     rewind(src);
     
     char* buf = malloc(sizeof(char) * (len + 1));
+    memset(buf, 0x00, len + 1);
+
     if (buf == NULL) {
         fprintf(stderr, "error: malloc() in compress_to_file() returned NULL pointer.\n");
         return -1;
