@@ -179,20 +179,20 @@ void compress_to_file(FILE* src) {
 
     FILE* out = fopen("./compressed.b", "wb");
     
-    char dst[9];
+    char dst[8];
     for (uint32_t i = 0; i < len; i++) {
         if (i % 8 == 0) {
             strncpy(dst, &buf[i], 8);
 
             // padding 
-            size_t dst_len = strlen(dst);
+            size_t dst_len = strlen(dst); // can be optmized but we need to check if we need to pad
             if (dst_len < 8) {
                 uint8_t start = 8 - dst_len;
-                for (uint8_t i = start; i < 8; i++)
-                    dst[i] = '0';
+                for (uint8_t j = start; j < 8; j++)
+                    dst[j] = '0';
             }
 
-            uint8_t v = strtol(dst, NULL, 2);
+            uint8_t v = (uint8_t)strtol(dst, NULL, 2);
             printf("number for %s is %d\n", dst, v);
             // we know the max will be 8bits since we are manually parsing 8 bits
             fwrite(&v, sizeof(v), 1, out);
