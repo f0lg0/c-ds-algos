@@ -71,8 +71,8 @@ int32_t main() {
     
     struct element* tree = make_htree(&q);
 
-    compress(tree, ibuf);
-    // decompress(tree);
+    uint32_t e_len = compress(tree, ibuf);
+    decompress(tree, e_len);
 
     destroy_htree(tree);
     destroy_elements_wrapper(els);

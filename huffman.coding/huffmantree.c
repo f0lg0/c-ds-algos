@@ -54,15 +54,26 @@ struct element* make_htree(struct priority_queue* q) {
     return ret;
 }
 
-void decompress(struct element* root) {
-    FILE* src = fopen("./tmp", "rb");
+// lookup table to improve speed
+const char *bit_rep[16] = {
+    [ 0] = "0000", [ 1] = "0001", [ 2] = "0010", [ 3] = "0011",
+    [ 4] = "0100", [ 5] = "0101", [ 6] = "0110", [ 7] = "0111",
+    [ 8] = "1000", [ 9] = "1001", [10] = "1010", [11] = "1011",
+    [12] = "1100", [13] = "1101", [14] = "1110", [15] = "1111",
+};
+
+
+void decompress(struct element* root, uint32_t e_len) {
+    (void)root;
+
+    FILE* src = fopen("./compressed.b", "rb");
     ssize_t len;
     
     fseek(src, 0, SEEK_END);
     len = ftell(src);
     rewind(src);
     
-    char* buf = malloc(sizeof(char) * len);
+    uint8_t* buf = malloc(sizeof(uint8_t) * len);
     if (buf == NULL) {
         printf("error: failed to allocate memory");
         return;
@@ -71,15 +82,20 @@ void decompress(struct element* root) {
     fread(buf, sizeof(char), len, src);
     fclose(src);
     
-    printf("read stream: ");
-    for (uint32_t i = 0; i < len; i++)
-        printf("%c", buf[i]);
+    uint32_t next_multiple_8 = ((e_len + 7) >> 3) << 3;
+    printf("next %d\n", next_multiple_8);
 
-    printf("\n");
+    char* bstring = malloc(sizeof(char) * next_multiple_8);
+    char* p = bstring;
+
+    for (uint32_t i = 0; i < len; i++)
+        p += sprintf(p, "%s%s", bit_rep[buf[i] >> 4], bit_rep[buf[i] & 0x0F]);
+
+    printf("read: %s\n", bstring);
 
     struct element* target = root;
 
-    for (uint32_t i = 0; i < len; i++) {
+    for (uint32_t i = 0; i < e_len; i++) {
         if (target->letter) {
             // we have reached a letter
             printf("%c", target->letter);
@@ -88,7 +104,7 @@ void decompress(struct element* root) {
             target = root;
         }
 
-        if (buf[i] == '0')
+        if (bstring[i] == '0')
             target = target->left;
         else
             target = target->right;
@@ -99,7 +115,7 @@ void decompress(struct element* root) {
 
     printf("\n");
     free(buf);
-    remove("./tmp");
+    free(bstring);
 }
 
 void encode(struct element* root, char* arr, uint8_t top, struct mapped_letter* start) {
@@ -150,28 +166,21 @@ void dump_encoded(char* input, FILE* fptr, struct mapped_letter* start) {
         // TODO: parse digits in groups of 8 (8 bits), store that in an uint8_t and dump that entirely 
         // padding will be necessary but since we know the length we can discard whatever comes after that
 
-        /*
-         * 0111110110110100110110110
-         * becomes
-         * 10001111|10110110|10011011|0110 (and add 0s to pad it)
-         * and then dump each part as an integer (first e.g. is 143 decimal)
-         * */
         fwrite(tmp->code, sizeof(char), tmp->code_size, fptr);
     }
 }
 
-void compress_to_file(FILE* src) {
-    ssize_t len;
+uint32_t compress_to_file(FILE* src) {
+    uint32_t len;
     
     fseek(src, 0, SEEK_END);
     len = ftell(src);
     rewind(src);
     
-    printf("len: %ld\n", len);
     char* buf = malloc(sizeof(char) * len);
     if (buf == NULL) {
         printf("error: failed to allocate memory");
-        return;
+        return -1;
     }
 
     fread(buf, sizeof(char), len, src);
@@ -202,9 +211,11 @@ void compress_to_file(FILE* src) {
     free(buf);
     remove("./tmp");
     fclose(out);
+
+    return len;
 }
 
-void compress(struct element* root, char* input) {
+int32_t compress(struct element* root, char* input) {
     char arr[htree_height(root)];
     FILE* fptr = fopen("./tmp", "wb+");
 
@@ -220,7 +231,7 @@ void compress(struct element* root, char* input) {
     encode(root, arr, 0, start);
     // now we have a linked list of letters mapped to their code, we can use it to write to file
     dump_encoded(input, fptr, start->next); // skipping head
-    compress_to_file(fptr);
+    int32_t e_len = compress_to_file(fptr);
     
     // free the linked list
     struct mapped_letter* tmp = NULL;
@@ -232,6 +243,8 @@ void compress(struct element* root, char* input) {
     }
 
     fclose(fptr);
+    printf("ELEN: %d\n", e_len);
+    return e_len;
 }
 
 void destroy_htree(struct element* root) {
