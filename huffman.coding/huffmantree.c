@@ -68,7 +68,7 @@ void decompress(struct element* root, uint32_t e_len) {
 
     rewind(src);
     
-    uint8_t* buf = malloc(sizeof(uint8_t) * len);
+    uint8_t* buf = malloc(sizeof(uint8_t) * (len + 1));
     if (buf == NULL) {
         fprintf(stderr, "error: malloc() in decompress() returned NULL pointer.\n");
         return;
@@ -87,7 +87,7 @@ void decompress(struct element* root, uint32_t e_len) {
     
     uint32_t next_multiple_8 = ((e_len + 7) >> 3) << 3;
 
-    char* bstring = malloc(sizeof(char) * next_multiple_8);
+    char* bstring = malloc(sizeof(char) * (next_multiple_8 + 1));
     char* p = bstring;
 
     for (uint32_t i = 0; i < len; i++)
@@ -172,7 +172,7 @@ uint32_t compress_to_file(FILE* src) {
     len = ftell(src);
     rewind(src);
     
-    char* buf = malloc(sizeof(char) * len);
+    char* buf = malloc(sizeof(char) * (len + 1));
     if (buf == NULL) {
         fprintf(stderr, "error: malloc() in compress_to_file() returned NULL pointer.\n");
         return -1;
