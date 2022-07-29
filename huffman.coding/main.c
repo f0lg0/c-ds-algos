@@ -54,7 +54,7 @@ struct elements_wrapper* craft_freq_array(char* str, uint32_t str_length) {
 
 int32_t main() {
     FILE* input = fopen("./input.txt", "rb");
-    int32_t input_len = 0;
+    ssize_t input_len = 0;
     
     fseek(input, 0, SEEK_END);
     input_len = ftell(input);
@@ -71,7 +71,14 @@ int32_t main() {
         return -1;
     }
 
-    fread(ibuf, sizeof(char), input_len, input);
+    size_t ret = fread(ibuf, sizeof(char), input_len, input);
+    if (ret != (size_t)input_len) {
+        if (feof(input)) {
+            fprintf(stderr, "error: unexpected EOF while reading from file in main().\n");
+        } else if (ferror(input)) {
+            fprintf(stderr, "error: reading from file in main() failed.\n");
+        }
+    }
 
     struct elements_wrapper* els = craft_freq_array(ibuf, input_len);
     
@@ -87,6 +94,7 @@ int32_t main() {
     destroy_elements_wrapper(els);
     destroy_heap(&q); 
     free(ibuf);
+    fclose(input);
 
     return 0;
 }

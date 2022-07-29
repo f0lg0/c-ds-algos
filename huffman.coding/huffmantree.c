@@ -74,7 +74,15 @@ void decompress(struct element* root, uint32_t e_len) {
         return;
     }
 
-    fread(buf, sizeof(char), len, src);
+    size_t ret = fread(buf, sizeof(char), len, src);
+    if (ret != (size_t)len) {
+        if (feof(src)) {
+            fprintf(stderr, "error: unexpected EOF while reading from file in decompress().\n");
+        } else if (ferror(src)) {
+            fprintf(stderr, "error: reading from file in decompress() failed.\n");
+        }
+    }
+
     fclose(src);
     
     uint32_t next_multiple_8 = ((e_len + 7) >> 3) << 3;
@@ -170,10 +178,18 @@ uint32_t compress_to_file(FILE* src) {
         return -1;
     }
 
-    fread(buf, sizeof(char), len, src);
+    size_t ret = fread(buf, sizeof(char), len, src);
+    if (ret != len) {
+        if (feof(src)) {
+            fprintf(stderr, "error: unexpected EOF while reading from file in compress_to_file().\n");
+        } else if (ferror(src)) {
+            fprintf(stderr, "error: reading from file in compress_to_file() failed.\n");
+        }
+    }
+
     FILE* out = fopen("./compressed.b", "wb");
     
-    char dst[8];
+    char dst[9];
     for (uint32_t i = 0; i < len; i++) {
         if (i % 8 == 0) {
             strncpy(dst, &buf[i], 8);
