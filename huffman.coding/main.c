@@ -65,7 +65,7 @@ int32_t main() {
         return -1;
     }
 
-    char* ibuf = malloc(sizeof(char) * input_len);
+    char* ibuf = malloc(sizeof(char) * (input_len + 1));
     if (ibuf == NULL) {
         fprintf(stderr, "error: malloc() returned NULL pointer.\n");
         return -1;
@@ -79,6 +79,8 @@ int32_t main() {
             fprintf(stderr, "error: reading from file in main() failed.\n");
         }
     }
+
+    ibuf[input_len] = '\0';
 
     struct elements_wrapper* els = craft_freq_array(ibuf, input_len);
     
