@@ -54,17 +54,26 @@ struct elements_wrapper* craft_freq_array(char* str, uint32_t str_length) {
 
 int32_t main() {
     FILE* input = fopen("./input.txt", "rb");
+    int32_t input_len = 0;
     
     fseek(input, 0, SEEK_END);
-    int32_t input_length = ftell(input);
+    input_len = ftell(input);
     rewind(input);
 
-    char* ibuf = malloc(sizeof(char) * input_length);
-    fread(ibuf, sizeof(char), input_length, input);
-    
-    printf("input: %s\n  length: %d\n\n", ibuf, input_length);
+    if (input_len == -1) {
+        fprintf(stderr, "error: ftell() on input.txt returned -1.\n");
+        return -1;
+    }
 
-    struct elements_wrapper* els = craft_freq_array(ibuf, input_length);
+    char* ibuf = malloc(sizeof(char) * input_len);
+    if (ibuf == NULL) {
+        fprintf(stderr, "error: malloc() returned NULL pointer.\n");
+        return -1;
+    }
+
+    fread(ibuf, sizeof(char), input_len, input);
+
+    struct elements_wrapper* els = craft_freq_array(ibuf, input_len);
     
     struct priority_queue q;
     make_heap(&q, els->len, els->array, els->len);

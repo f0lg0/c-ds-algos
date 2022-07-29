@@ -13,14 +13,6 @@ struct mapped_letter {
     struct mapped_letter* next;
 };
 
-void traverse_htree(struct element* root) {
-    if (root == NULL) return;
-
-    traverse_htree(root->left);
-    printf("node at %p:\n\tletter: %c\n\tfreq: %d\n\tleft: %p\n\tright: %p\n\n", root, root->letter, root->freq, root->left, root->right);
-    traverse_htree(root->right);
-}
-
 int8_t check_size_one(struct priority_queue* q) {
     return (q->n == 1);
 }
@@ -64,18 +56,21 @@ const char *bit_rep[16] = {
 
 
 void decompress(struct element* root, uint32_t e_len) {
-    (void)root;
-
     FILE* src = fopen("./compressed.b", "rb");
     ssize_t len;
     
     fseek(src, 0, SEEK_END);
     len = ftell(src);
+    if (len == -1) {
+        fprintf(stderr, "error: ftell() in decompress() returned -1.\n");
+        return;
+    }
+
     rewind(src);
     
     uint8_t* buf = malloc(sizeof(uint8_t) * len);
     if (buf == NULL) {
-        printf("error: failed to allocate memory");
+        fprintf(stderr, "error: malloc() in decompress() returned NULL pointer.\n");
         return;
     }
 
@@ -83,7 +78,6 @@ void decompress(struct element* root, uint32_t e_len) {
     fclose(src);
     
     uint32_t next_multiple_8 = ((e_len + 7) >> 3) << 3;
-    printf("next %d\n", next_multiple_8);
 
     char* bstring = malloc(sizeof(char) * next_multiple_8);
     char* p = bstring;
@@ -91,14 +85,13 @@ void decompress(struct element* root, uint32_t e_len) {
     for (uint32_t i = 0; i < len; i++)
         p += sprintf(p, "%s%s", bit_rep[buf[i] >> 4], bit_rep[buf[i] & 0x0F]);
 
-    printf("read: %s\n", bstring);
-
     struct element* target = root;
+    FILE* out = fopen("./decompressed.b", "wb");
 
     for (uint32_t i = 0; i < e_len; i++) {
         if (target->letter) {
             // we have reached a letter
-            printf("%c", target->letter);
+            fwrite(&target->letter, sizeof(char), 1, out);
 
             // starting again from the top
             target = root;
@@ -110,12 +103,12 @@ void decompress(struct element* root, uint32_t e_len) {
             target = target->right;
     }
 
-    // printing last entered node
-    printf("%c", target->letter);
+    // writing last entered node
+    fwrite(&target->letter, sizeof(char), 1, out);
 
-    printf("\n");
     free(buf);
     free(bstring);
+    fclose(out);
 }
 
 void encode(struct element* root, char* arr, uint8_t top, struct mapped_letter* start) {
@@ -128,17 +121,15 @@ void encode(struct element* root, char* arr, uint8_t top, struct mapped_letter* 
         encode(root->right, arr, top + 1, start);
     }
     if (root->left == NULL && root->right == NULL) {
-        printf("> %c  | ", root->letter);
-
-        for (uint32_t i = 0; i < top; i++)
-            printf("%c", arr[i]);
-        
-        printf("\n");
-
         struct mapped_letter* new = malloc(sizeof(struct mapped_letter));
         new->letter = &(root->letter);
 
         char* copy = malloc(sizeof(char) * top);
+        if (copy == NULL) {
+            fprintf(stderr, "error: malloc() in encode() returned NULL pointer.\n");
+            return;
+        }
+
         memcpy(copy, arr, sizeof(char) * top);
         new->code = copy;
 
@@ -162,10 +153,6 @@ void dump_encoded(char* input, FILE* fptr, struct mapped_letter* start) {
         while (*(tmp->letter) != input[i])
             tmp = tmp->next;
         
-        // we are actually writing uint8_t(s) to the file, so 8 bits per digit.
-        // TODO: parse digits in groups of 8 (8 bits), store that in an uint8_t and dump that entirely 
-        // padding will be necessary but since we know the length we can discard whatever comes after that
-
         fwrite(tmp->code, sizeof(char), tmp->code_size, fptr);
     }
 }
@@ -179,13 +166,11 @@ uint32_t compress_to_file(FILE* src) {
     
     char* buf = malloc(sizeof(char) * len);
     if (buf == NULL) {
-        printf("error: failed to allocate memory");
+        fprintf(stderr, "error: malloc() in compress_to_file() returned NULL pointer.\n");
         return -1;
     }
 
     fread(buf, sizeof(char), len, src);
-    printf("read stream: %s\n", buf);
-
     FILE* out = fopen("./compressed.b", "wb");
     
     char dst[8];
@@ -201,9 +186,8 @@ uint32_t compress_to_file(FILE* src) {
                     dst[j] = '0';
             }
 
-            uint8_t v = (uint8_t)strtol(dst, NULL, 2);
-            printf("number for %s is %d\n", dst, v);
             // we know the max will be 8bits since we are manually parsing 8 bits
+            uint8_t v = (uint8_t)strtol(dst, NULL, 2);
             fwrite(&v, sizeof(v), 1, out);
         }
     }
@@ -243,7 +227,6 @@ int32_t compress(struct element* root, char* input) {
     }
 
     fclose(fptr);
-    printf("ELEN: %d\n", e_len);
     return e_len;
 }
 
