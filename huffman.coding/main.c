@@ -53,23 +53,52 @@ struct elements_wrapper* craft_freq_array(char* str, uint32_t str_length) {
 
 
 int32_t main() {
-    char input[] = "BCAADDDCCACACAC";
-    uint32_t input_length = strlen(input);
-    printf("input: %s\n  length: %d\n  size: %ld\n\n", input, input_length, sizeof(input));
+    FILE* input = fopen("./input.txt", "rb");
+    ssize_t input_len = 0;
+    
+    fseek(input, 0, SEEK_END);
+    input_len = ftell(input);
+    rewind(input);
 
-    struct elements_wrapper* els = craft_freq_array(input, input_length);
+    if (input_len == -1) {
+        fprintf(stderr, "error: ftell() on input.txt returned -1.\n");
+        return -1;
+    }
+
+    printf("[+] running compression on file 'input.txt' of size %ld bytes\n", input_len);
+
+    char* ibuf = malloc(sizeof(char) * (input_len + 1));
+    if (ibuf == NULL) {
+        fprintf(stderr, "error: malloc() returned NULL pointer.\n");
+        return -1;
+    }
+
+    size_t ret = fread(ibuf, sizeof(char), input_len, input);
+    if (ret != (size_t)input_len) {
+        if (feof(input)) {
+            fprintf(stderr, "error: unexpected EOF while reading from file in main().\n");
+        } else if (ferror(input)) {
+            fprintf(stderr, "error: reading from file in main() failed.\n");
+        }
+    }
+
+    ibuf[input_len] = '\0';
+
+    struct elements_wrapper* els = craft_freq_array(ibuf, input_len);
     
     struct priority_queue q;
     make_heap(&q, els->len, els->array, els->len);
     
     struct element* tree = make_htree(&q);
 
-    compress(tree, input);
-    decompress(tree);
+    uint32_t e_len = compress(tree, ibuf);
+    decompress(tree, e_len);
 
     destroy_htree(tree);
     destroy_elements_wrapper(els);
     destroy_heap(&q); 
+    free(ibuf);
+    fclose(input);
 
     return 0;
 }
