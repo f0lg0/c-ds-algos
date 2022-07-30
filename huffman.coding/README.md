@@ -1,5 +1,7 @@
 # Huffman Coding
 
+![thumbnail](./meta/thumbnail.png)
+
 ## Disclaimer
 
 This implementation of the Huffman Coding algorithm is very simple and inefficient. It is mainly for educational purposes and it's not intended to be usable in real life scenarios.
