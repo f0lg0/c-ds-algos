@@ -56,6 +56,8 @@ const char *bit_rep[16] = {
 
 
 void decompress(struct element* root, uint32_t e_len) {
+    printf("[+] decompressing from file 'compressed.b'...\n");
+
     FILE* src = fopen("./compressed.b", "rb");
     ssize_t len;
     
@@ -117,6 +119,8 @@ void decompress(struct element* root, uint32_t e_len) {
     free(buf);
     free(bstring);
     fclose(out);
+
+    printf("[+] decompressed successfully to file 'decompressed.b'\n");
 }
 
 void encode(struct element* root, char* arr, uint8_t top, struct mapped_letter* start) {
@@ -189,7 +193,7 @@ uint32_t compress_to_file(FILE* src) {
         }
     }
 
-    FILE* out = fopen("./compressed.b", "wb");
+    FILE* out = fopen("./compressed.b", "wb+");
     
     char dst[9] = {""};
     for (uint32_t i = 0; i < len; i++) {
@@ -212,12 +216,20 @@ uint32_t compress_to_file(FILE* src) {
 
     free(buf);
     remove("./tmp");
+
+    fseek(out, 0, SEEK_END);
+    uint32_t tmp = ftell(out);
+    rewind(out);
+    printf("[+] 'compressed.b' size: %d bytes\n", tmp);
+
     fclose(out);
 
     return len;
 }
 
 int32_t compress(struct element* root, char* input) {
+    printf("[+] compressing...\n");
+
     char arr[htree_height(root)];
     FILE* fptr = fopen("./tmp", "wb+");
 
@@ -245,6 +257,8 @@ int32_t compress(struct element* root, char* input) {
     }
 
     fclose(fptr);
+
+    printf("[+] compressed succesfully to file 'compressed.b'.\n");
     return e_len;
 }
 

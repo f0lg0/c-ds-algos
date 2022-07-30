@@ -65,6 +65,8 @@ int32_t main() {
         return -1;
     }
 
+    printf("[+] running compression on file 'input.txt' of size %ld bytes\n", input_len);
+
     char* ibuf = malloc(sizeof(char) * (input_len + 1));
     if (ibuf == NULL) {
         fprintf(stderr, "error: malloc() returned NULL pointer.\n");
