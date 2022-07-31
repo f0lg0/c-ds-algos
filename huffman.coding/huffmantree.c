@@ -237,7 +237,7 @@ int32_t compress(struct element* root, char* input) {
     // ofc, an hash table would be better but I don't have time to implement one
     
     struct mapped_letter* start = malloc(sizeof(struct mapped_letter));
-    start->letter = '\0';
+    start->letter = NULL;
     start->code = NULL;
     start->code_size = 0;
     start->next = NULL;
